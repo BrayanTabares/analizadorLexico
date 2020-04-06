@@ -91,6 +91,12 @@ class Token
         const val IDENTIFICADOR_VARIABLE = "Identificador de variable"
         const val IDENTIFICADOR_PROCEDIMIENTO = "Identificador de procedimiento"
         const val IDENTIFICADOR_METODO = "Identificador de metodo "
+        const val OPERADOR_INCREMENTO = "Operador incremento"
+        const val OPERADOR_DECREMENTO = "Operador decremento"
+        const val COMENTARIO_BLOQUE = "Comentario de bloque"
+        const val PUNTO = "Punto"
+        const val DOS_PUNTOS = "Dos puntos"
+
     }
     // -----------------------------------------------------------------
 // Constructores

@@ -17,6 +17,9 @@ class AnalizadorLexico {
         var i = 0
         // Ciclo para extraer todos los tokens
         while (i < cod.length) { // Extrae el token de la posicin i
+            while (cod[i] == ' ' || cod[i] == '\t'){
+                i++
+            }
             token = extraerSiguienteToken(cod, i)
             vectorTokens.add(token)
             i = token!!.darIndiceSiguiente()
@@ -32,8 +35,10 @@ class AnalizadorLexico {
      * @param i   - posición a partir de la cúal se va a extraer el token - i>=0
      * @return token que se extrajo de la cadena
      */
-    fun extraerSiguienteToken(cod: String, i: Int): Token? {
+    fun extraerSiguienteToken(cod: String,  i: Int): Token? {
+
         var token: Token?
+
         token = extraerIdentificadorClases(cod, i)
         if (token != null) return token
         token = extraerIdentificadorMetodos(cod, i)
@@ -44,11 +49,11 @@ class AnalizadorLexico {
         if (token != null) return token
         token = extraerTipoDatoReal(cod, i)
         if (token != null) return token
+        token = extraerEntero(cod, i)
+        if (token != null) return token
         token = extraerReal(cod, i)
         if (token != null) return token
         token = extrarTipoDatoEntero(cod, i)
-        if (token != null) return token
-        token = extraerEntero(cod, i)
         if (token != null) return token
         token = extraerTipoDatoCaracter(cod, i)
         if (token != null) return token
@@ -106,6 +111,10 @@ class AnalizadorLexico {
         if (token != null) return token
         token = extraerOperadorSeparador(cod, i)
         if (token != null) return token
+        token = extraerOperadorIncremento(cod, i)
+        if (token != null) return token
+        token = extraerComentarioBloque(cod, i)
+        if (token != null) return token
         token = extraerNoReconocido(cod, i)
         return token
     }
@@ -119,7 +128,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extrarTipoDatoEntero(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex: String
         if (cod.substring(i, cod.length).length >= 4) {
             var j = i
             if (cod[j] == 'g') {
@@ -154,8 +163,20 @@ class AnalizadorLexico {
             do {
                 j++
             } while (j < cod.length && esDigito(cod[j]))
-            lex = cod.substring(i, j)
-            return Token(lex, Token.ENTERO, j)
+
+            if (j == cod.length){
+                lex = cod.substring(i, j)
+                return Token(lex, Token.ENTERO, j)
+            }
+            else
+            {
+                if (cod[j].toInt() != 39){
+                    lex = cod.substring(i, j)
+                    return Token(lex, Token.ENTERO, j)
+                }
+            }
+
+
         }
         return null
     }
@@ -169,7 +190,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoReal(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
             if (cod[j] == 'i') {
@@ -233,7 +254,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoCaracter(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 7) {
             if (cod[j] == 'z') {
@@ -276,7 +297,7 @@ class AnalizadorLexico {
      */
     fun extraerCaracter(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex: String
         if (cod[j] == '|') {
             j++
             if (cod.length > j + 1) {
@@ -300,7 +321,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoCadena(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex: String
         if (cod.substring(i, cod.length).length >= 6) {
             var j = i
             if (cod[j] == 'f') {
@@ -340,7 +361,7 @@ class AnalizadorLexico {
      */
     fun extraerCadena(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex:String
         if (cod[j] == '|') {
             j++
             if (j < cod.length && cod[j] == '|') {
@@ -368,7 +389,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoBoolean(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
             if (cod[j] == 'd') {
@@ -398,7 +419,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerBoolean(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         if (cod.substring(i, cod.length).length >= 4) {
             var j = i
             if (cod[j] == 'w') {
@@ -444,7 +465,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoClase(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 6) {
             if (cod[j] == 'k') {
@@ -484,7 +505,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoProcedimiento(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 5) {
             if (cod[j] == 's') {
@@ -521,7 +542,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoFuncion(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 7) {
             if (cod[j] == 't') {
@@ -564,7 +585,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoConstante(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
             if (cod[j] == 'e') {
@@ -598,7 +619,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoCondicionSi(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
             if (cod[j] == 'w') {
@@ -632,7 +653,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoCondicionSINO(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
             if (cod[j] == 'h') {
@@ -666,7 +687,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoSwitch(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
             if (cod[j] == 'a') {
@@ -701,7 +722,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoSwitchCasos(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
             if (cod[j] == 'f') {
@@ -736,7 +757,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerTipoDatoSwitchCierre(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
             if (cod[j] == 'b') {
@@ -847,7 +868,7 @@ class AnalizadorLexico {
      */
     fun extraerOperadorRelacional(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex:String
         if (cod.substring(i, cod.length).length >= 2) {
             if (cod[j] == '=') {
                 j++
@@ -902,9 +923,18 @@ class AnalizadorLexico {
         return null
     }
 
+    /**
+     * Método para extraer los operadores logicos and or y not
+     * que en este caso ## equivale a un and, @@ equivale a un or
+     * y / equivale a un not
+     *
+     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
+     * @param i   posición a partir de la cual se va a extraer nombre - i >=0
+     * @return el nombre del tipo de la cadena
+     */
     fun extraerOperadorLogico(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex:String
         if (cod.substring(i, cod.length).length >= 2) {
             if (cod[i] == '#') {
                 j++
@@ -915,9 +945,9 @@ class AnalizadorLexico {
                 }
             }
             j = i
-            if (cod[i] == '%') {
+            if (cod[i] == '@') {
                 j++
-                if (cod[i + 1] == '%') {
+                if (cod[i + 1] == '@') {
                     j++
                     lex = cod.substring(i, j)
                     return Token(lex, Token.OPERADOR_LOGICO, j)
@@ -959,7 +989,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerDatoCicloFor(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 5) {
             if (cod[j] == 'k') {
@@ -996,7 +1026,7 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerDatoCicloWhile(cod: String, i: Int): Token? {
-        var lex = ""
+        var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 7) {
             if (cod[j] == 'r') {
@@ -1092,7 +1122,7 @@ class AnalizadorLexico {
      */
     fun extraerBloqueSentencia(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex:String
         if (cod.substring(i, cod.length).length >= 2) {
             if (cod[i] == '<') {
                 j++
@@ -1124,7 +1154,7 @@ class AnalizadorLexico {
      */
     fun extraerIdentificadorClases(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex:String
         if (cod[j] == '-') {
             j++
             if (j < cod.length && esLetra(cod[j])) {
@@ -1150,7 +1180,7 @@ class AnalizadorLexico {
      */
     fun extraerIdentificadorMetodos(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex:String
         if (cod[j] == '_') {
             j++
             if (j < cod.length && esLetra(cod[j])) {
@@ -1176,7 +1206,7 @@ class AnalizadorLexico {
      */
     fun extraerIdentificadorProcedimiento(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex:String
         if (cod[j] == ';') {
             j++
             if (j < cod.length && esLetra(cod[j])) {
@@ -1206,7 +1236,7 @@ class AnalizadorLexico {
      */
     fun extraerIdentificadorVariables(cod: String, i: Int): Token? {
         var j = i
-        var lex = ""
+        var lex:String
         if (cod[j] == '.') {
             j++
             if (j < cod.length && esLetra(cod[j])) {
@@ -1217,6 +1247,79 @@ class AnalizadorLexico {
                     j++
                     lex = cod.substring(i, j)
                     return Token(lex, Token.IDENTIFICADOR_VARIABLE, j)
+                }
+            }
+        }
+        return null
+    }
+
+    /**
+     * Método para extrar un operador de incremente el cual se encarga de incrementar
+     * el valor de una variable positivamente
+     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
+     * @param i   posición a partir de la cúal se va a extraer nombre - i >=0
+     * @return el nombre del tipo de la cadena
+     */
+    fun extraerOperadorIncremento(cod: String, i: Int): Token? {
+        var j = i
+        var lex:String
+        if (cod.substring(i, cod.length).length >= 2) {
+            if (cod[j] == '+') {
+                j++
+                if (cod[j] == '$') {
+                    j++
+                    lex = cod.substring(i, j)
+                    return Token(lex, Token.OPERADOR_INCREMENTO,j)
+                }
+            }
+        }
+        return null
+    }
+
+    /**
+     * Método para un comentario de bloque que inicia con % y finaliza con %
+     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
+     * @param i   posición a partir de la cúal se va a extraer nombre - i >=0
+     * @return el nombre del tipo de la cadena
+     */
+    fun extraerComentarioBloque(cod: String, i: Int): Token? {
+        var j = i
+        var lex:String
+        if (cod[j] == '%') {
+            j++
+            while (j < cod.length && cod[j] != '%') {
+                j++
+            }
+            if (j == cod.length){
+                return null
+            }else{
+                j++
+                lex = cod.substring(i, j)
+                return Token(lex, Token.COMENTARIO_BLOQUE, j)
+            }
+
+
+        }
+        return null
+    }
+
+    /**
+     * Método para extraer un operador de decremento el cual se encarga de decrementar
+     * el valor de una variabale negativamente
+     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
+     * @param i   posición a partir de la cúal se va a extraer nombre - i >=0
+     * @return el nombre del tipo de la cadena
+     */
+    fun extraerOperadorDecremento(cod: String, i: Int): Token? {
+        var j = i
+        var lex:String
+        if (cod.substring(i, cod.length).length >= 2) {
+            if (cod[j] == '-') {
+                j++
+                if (cod[j] == '¬') {
+                    j++
+                    lex = cod.substring(i, j)
+                    return Token(lex, Token.OPERADOR_DECREMENTO,j)
                 }
             }
         }
