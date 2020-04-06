@@ -17,7 +17,7 @@ class AnalizadorLexico {
         var i = 0
         // Ciclo para extraer todos los tokens
         while (i < cod.length) { // Extrae el token de la posicin i
-            while (cod[i] == ' ' || cod[i] == '\t'){
+            while (cod[i] == ' '){
                 i++
             }
             token = extraerSiguienteToken(cod, i)
@@ -38,13 +38,6 @@ class AnalizadorLexico {
     fun extraerSiguienteToken(cod: String,  i: Int): Token? {
 
         var token: Token?
-
-        token = extraerIdentificadorClases(cod, i)
-        if (token != null) return token
-        token = extraerIdentificadorMetodos(cod, i)
-        if (token != null) return token
-        token = extraerIdentificadorProcedimiento(cod, i)
-        if (token != null) return token
         token = extraerIdentificadorVariables(cod, i)
         if (token != null) return token
         token = extraerTipoDatoReal(cod, i)
@@ -1129,87 +1122,10 @@ class AnalizadorLexico {
         return null
     }
 
-    /**
-     * Método para extraer el nombre del tipo de un identificador, en este caso extrae
-     * el identificador de clase.
-     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
-     * @param i   posición a partir de la cúal se va a extraer nombre - i >=0
-     * @return el nombre del tipo de la cadena
-     */
-    fun extraerIdentificadorClases(cod: String, i: Int): Token? {
-        var j = i
-        var lex:String
-        if (cod[j] == '-') {
-            j++
-            if (j < cod.length && esLetra(cod[j])) {
-                do {
-                    j++
-                } while (j < cod.length && esLetra(cod[j]))
-                if (j < cod.length && cod[j] == '-') {
-                    j++
-                    lex = cod.substring(i, j)
-                    return Token(lex, Token.IDENTIFICADOR_CLASE, j)
-                }
-            }
-        }
-        return null
-    }
 
-    /**
-     * Método para extraer el nombre del tipo de un identificador, en este caso extrae
-     * el identificador de metodos.
-     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
-     * @param i   posición a partir de la cúal se va a extraer nombre - i >=0
-     * @return el nombre del tipo de la cadena
-     */
-    fun extraerIdentificadorMetodos(cod: String, i: Int): Token? {
-        var j = i
-        var lex:String
-        if (cod[j] == '_') {
-            j++
-            if (j < cod.length && esLetra(cod[j])) {
-                do {
-                    j++
-                } while (j < cod.length && esLetra(cod[j]))
-                if (j < cod.length && cod[j] == '_') {
-                    j++
-                    lex = cod.substring(i, j)
-                    return Token(lex, Token.IDENTIFICADOR_METODO, j)
-                }
-            }
-        }
-        return null
-    }
 
-    /**
-     * Método para extraer el nombre del tipo de un identificador, en este caso extrae
-     * el identificador de procedimentos.
-     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
-     * @param i   posición a partir de la cúal se va a extraer nombre - i >=0
-     * @return el nombre del tipo de la cadena
-     */
-    fun extraerIdentificadorProcedimiento(cod: String, i: Int): Token? {
-        var j = i
-        var lex:String
-        if (cod[j] == ';') {
-            j++
-            if (j < cod.length && esLetra(cod[j])) {
-                do {
-                    j++
-                } while (j < cod.length && esLetra(cod[j]))
-                if (j < cod.length && cod[j] == ';') {
-                    j++
-                    lex = cod.substring(i, j)
-                    return Token(
-                        lex,
-                        Token.IDENTIFICADOR_PROCEDIMIENTO,
-                        j
-                    )
-                }
-            }
-        }
-        return null
-    }
+
+
 
     /**
      * Método para extraer el nombre del tipo de un identificador, en este caso extrae
@@ -1221,16 +1137,16 @@ class AnalizadorLexico {
     fun extraerIdentificadorVariables(cod: String, i: Int): Token? {
         var j = i
         var lex:String
-        if (cod[j] == '.') {
+        if (cod[j] == '-') {
             j++
             if (j < cod.length && esLetra(cod[j])) {
                 do {
                     j++
                 } while (j < cod.length && esLetra(cod[j]))
-                if (j < cod.length && cod[j] == '.') {
+                if (j < cod.length && cod[j] == '-') {
                     j++
                     lex = cod.substring(i, j)
-                    return Token(lex, Token.IDENTIFICADOR_VARIABLE, j)
+                    return Token(lex, Token.IDENTIFICADOR, j)
                 }
             }
         }

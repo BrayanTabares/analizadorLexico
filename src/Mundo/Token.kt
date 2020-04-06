@@ -69,7 +69,6 @@ class Token
          * Constantes para modelar los posibles tipos de token que se van a analizar
          */
         const val ENTERO = "Entero"
-        const val OPERADORADITIVO = "Operador aditivo"
         const val OPERADORASIGNACION = "Operador de asignación"
         const val IDENTIFICADOR = "Identificador"
         const val NORECONOCIDO = "No reconocido"
@@ -87,10 +86,7 @@ class Token
         const val OPERADOR_LOGICO = "Operador logico"
         const val OPERADOR_AGRUPACION = "Operador de agrupación"
         const val OPERADOR_SEPARACION = "Operador de separación"
-        const val IDENTIFICADOR_CLASE = "Identificador de clase"
-        const val IDENTIFICADOR_VARIABLE = "Identificador de variable"
-        const val IDENTIFICADOR_PROCEDIMIENTO = "Identificador de procedimiento"
-        const val IDENTIFICADOR_METODO = "Identificador de metodo "
+
         const val OPERADOR_INCREMENTO = "Operador incremento"
         const val OPERADOR_DECREMENTO = "Operador decremento"
         const val COMENTARIO_BLOQUE = "Comentario de bloque"
