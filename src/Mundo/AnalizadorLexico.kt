@@ -1121,26 +1121,10 @@ class AnalizadorLexico {
      * @return el nombre del tipo de la cadena
      */
     fun extraerBloqueSentencia(cod: String, i: Int): Token? {
-        var j = i
-        var lex:String
-        if (cod.substring(i, cod.length).length >= 2) {
-            if (cod[i] == '<') {
-                j++
-                if (cod[i + 1] == '!') {
-                    j++
-                    lex = cod.substring(i, j)
-                    return Token(lex, Token.BLOQUE_SENTENCIA, j)
-                }
-            }
-            j = i
-            if (cod[i] == '!') {
-                j++
-                if (cod[i + 1] == '>') {
-                    j++
-                    lex = cod.substring(i, j)
-                    return Token(lex, Token.BLOQUE_SENTENCIA, j)
-                }
-            }
+        if (cod[i] == '[' || cod[i] == ']') {
+            val j = i + 1
+            val lex = cod.substring(i, j)
+            return Token(lex, Token.OPERADOR_AGRUPACION, j)
         }
         return null
     }
