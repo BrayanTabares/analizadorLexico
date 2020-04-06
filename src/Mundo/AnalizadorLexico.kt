@@ -108,6 +108,10 @@ class AnalizadorLexico {
         if (token != null) return token
         token = extraerComentarioBloque(cod, i)
         if (token != null) return token
+        token = extraerPunto(cod, i)
+        if (token != null) return token
+        token = extraerDosPuntos(cod, i)
+        if (token != null) return token
         token = extraerNoReconocido(cod, i)
         return token
     }
@@ -138,6 +142,40 @@ class AnalizadorLexico {
                     }
                 }
             }
+        }
+        return null
+    }
+
+    /**
+     * Método para extraer el token que representaria un punto en java
+     *
+     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
+     * @param i   posición a partir de la cúal se va a extraer nombre - i >=0
+     * @return el nombre del tipo de la cadena
+     */
+    fun extraerPunto(cod: String, i: Int): Token? {
+        var lex: String
+        if (cod[i] == ';') {
+            val j = i + 1
+            val lex = cod.substring(i, j)
+            return Token(lex, Token.PUNTO, j)
+        }
+        return null
+    }
+
+    /**
+     * Método para extraer el token que representaria dos puntos en java
+     *
+     * @param cod codigo de el cúal se va a extraer el nombre - codigo!=null
+     * @param i   posición a partir de la cúal se va a extraer nombre - i >=0
+     * @return el nombre del tipo de la cadena
+     */
+    fun extraerDosPuntos(cod: String, i: Int): Token? {
+        var lex: String
+        if (cod[i] == '?') {
+            val j = i + 1
+            val lex = cod.substring(i, j)
+            return Token(lex, Token.DOS_PUNTOS, j)
         }
         return null
     }
