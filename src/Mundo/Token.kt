@@ -8,7 +8,7 @@ class Token
  * Constructor de un token
  * @param elLexema - cadena - laCadena != null
  * @param elTipo - tipo del token - elTipo != null
- * @param elIndiceSiguiente - posici�n del siguiente token - laPosicionSiguiente > 0
+ * @param elIndiceSiguiente - posicion del siguiente token - laPosicionSiguiente > 0
  */(
     /**
      * Lexema
@@ -19,7 +19,7 @@ class Token
      */
     private val tipo: String,
     /**
-     * posici�n del siguiente lexema
+     * posicion del siguiente lexema
      */
     private val indiceSiguiente: Int
 ) {
@@ -34,11 +34,11 @@ class Token
      * @return Descripci�n del token
      */
     fun darDescripcion(): String {
-        return "Mundo.Token: $lexema     Tipo: $tipo     �ndice del siguiente: $indiceSiguiente"
+        return "Mundo.Token: $lexema     Tipo: $tipo     Indice del siguiente: $indiceSiguiente"
     }
 
     /**
-     * M�todo que retorna el lexema del token
+     * todo que retorna el lexema del token
      * @return el lexema del token
      */
     fun darLexema(): String {
@@ -46,15 +46,15 @@ class Token
     }
 
     /**
-     * M�todo que retorna la posici�n del siguiente lexema
-     * @return posici�n del siguiente token
+     * todo que retorna la posici�n del siguiente lexema
+     * @return posicion del siguiente token
      */
     fun darIndiceSiguiente(): Int {
         return indiceSiguiente
     }
 
     /**
-     * M�todo que retorna el tipo del token
+     * todo que retorna el tipo del token
      * @return el tipo del token
      */
     fun darTipo(): String {
@@ -95,6 +95,5 @@ class Token
 
     }
     // -----------------------------------------------------------------
-// Constructores
-// -----------------------------------------------------------------
+
 }

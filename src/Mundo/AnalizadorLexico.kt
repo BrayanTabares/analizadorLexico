@@ -10,14 +10,15 @@ class AnalizadorLexico {
      * @param cod - código al cúal se le van a extraer los tokens - !=null
      * @return vector con los tokens
      */
-    fun extraerTokens(cod: String): ArrayList<Token?> {
+    fun extraerTokens(cod1: String): ArrayList<Token?> {
+        var cod : String = " " + cod1
         var token: Token?
         var vectorTokens: ArrayList<Token?> = ArrayList<Token?>()
         // El primer token se extrae a partir de posicin cero
         var i = 0
         // Ciclo para extraer todos los tokens
         while (i < cod.length) { // Extrae el token de la posicin i
-            while (cod[i] == ' '){
+           while (cod[i] == ' '){
                 i++
             }
             token = extraerSiguienteToken(cod, i)
@@ -136,8 +137,15 @@ class AnalizadorLexico {
                         j++
                         if (cod[j] == 'z') {
                             j++
-                            lex = cod.substring(i, j)
-                            return Token(lex, Token.TIPO_DATO, j)
+                            if (cod.substring(i, cod.length).length == 4) {
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.TIPO_DATO, j)
+                            }
+                            if (cod[j] == ' ') {
+                                j++
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.TIPO_DATO, j)
+                            }
                         }
                     }
                 }
@@ -224,8 +232,6 @@ class AnalizadorLexico {
         var lex:String
         var j = i
         if (cod.substring(i, cod.length).length >= 4) {
-            if (cod[j] == 'i') {
-                j++
                 if (cod[j] == 'e') {
                     j++
                     if (cod[j] == 'c') {
@@ -234,13 +240,20 @@ class AnalizadorLexico {
                             j++
                             if (cod[j] == 't') {
                                 j++
-                                lex = cod.substring(i, j)
-                                return Token(lex, Token.TIPO_DATO, j)
+                                if (cod.substring(i, cod.length).length == 4) {
+                                    lex = cod.substring(i, j)
+                                    return Token(lex, Token.TIPO_DATO, j)
+                                }
+                                if (cod[j] == ' ') {
+                                    j++
+                                    lex = cod.substring(i, j)
+                                    return Token(lex, Token.TIPO_DATO, j)
+                                }
+
                             }
                         }
                     }
                 }
-            }
         }
         return null
     }
@@ -302,12 +315,15 @@ class AnalizadorLexico {
                                     j++
                                     if (cod[j] == 'n') {
                                         j++
-                                        lex = cod.substring(i, j)
-                                        return Token(
-                                            lex,
-                                            Token.TIPO_DATO,
-                                            j
-                                        )
+                                        if (cod.substring(i, cod.length).length == 7) {
+                                            lex = cod.substring(i, j)
+                                            return Token(lex, Token.TIPO_DATO, j)
+                                        }
+                                        if (cod[j] == ' ') {
+                                            j++
+                                            lex = cod.substring(i, j)
+                                            return Token(lex, Token.TIPO_DATO, j)
+                                        }
                                     }
                                 }
                             }
@@ -331,8 +347,18 @@ class AnalizadorLexico {
         var lex: String
         if (cod[j] == '|') {
             j++
-            if (cod.length > j + 1) {
-                j++
+            if (cod.length > j + 1 ) {
+                if(cod[j] == '&' && j + 2 < cod.length){
+                    j++
+                    if(cod.length > j  && (cod[j] == 'n'|| cod[j] == 's' || cod[j] == 't' || cod[j] == '|' || cod[j] == '&')){
+                        j++
+                        print("entra")
+                    }else{
+                        return null
+                    }
+                }else{
+                    j++
+                }
                 if (cod[j] == '|') {
                     j++
                     lex = cod.substring(i, j)
@@ -367,12 +393,15 @@ class AnalizadorLexico {
                                 j++
                                 if (cod[j] == 'l') {
                                     j++
-                                    lex = cod.substring(i, j)
-                                    return Token(
-                                        lex,
-                                        Token.TIPO_DATO,
-                                        j
-                                    )
+                                    if (cod.substring(i, cod.length).length == 6) {
+                                        lex = cod.substring(i, j)
+                                        return Token(lex, Token.TIPO_DATO, j)
+                                    }
+                                    if (cod[j] == ' ') {
+                                        j++
+                                        lex = cod.substring(i, j)
+                                        return Token(lex, Token.TIPO_DATO, j)
+                                    }
                                 }
                             }
                         }
@@ -397,8 +426,17 @@ class AnalizadorLexico {
             j++
             if (j < cod.length && cod[j] == '|') {
                 j++
-                while (j < cod.length && cod[j] != '|') {
-                    j++
+                while (j < cod.length && cod[j] != '|' ) {
+                    if(j+1 < cod.length && cod[j] == '&'){
+                        j++
+                        if(cod[j] == 'n'|| cod[j] == 's' || cod[j] == 't' || cod[j] == '|' || cod[j] == '&'){
+                            j++
+                        }else{
+                            return null
+                        }
+                    }else{
+                        j++
+                    }
                 }
                 j++
                 if (j < cod.length && cod[j] == '|') {
@@ -431,8 +469,15 @@ class AnalizadorLexico {
                         j++
                         if (cod[j] == 'h') {
                             j++
-                            lex = cod.substring(i, j)
-                            return Token(lex, Token.TIPO_DATO, j)
+                            if (cod.substring(i, cod.length).length == 4) {
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.TIPO_DATO, j)
+                            }
+                            if (cod[j] == ' ') {
+                                j++
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.TIPO_DATO, j)
+                            }
                         }
                     }
                 }
@@ -511,12 +556,15 @@ class AnalizadorLexico {
                                 j++
                                 if (cod[j] == 'e') {
                                     j++
-                                    lex = cod.substring(i, j)
-                                    return Token(
-                                        lex,
-                                        Token.PALABRA_RESERVADA,
-                                        j
-                                    )
+                                    if (cod.substring(i, cod.length).length == 6) {
+                                        lex = cod.substring(i, j)
+                                        return Token(lex, Token.PALABRA_RESERVADA, j)
+                                    }
+                                    if (cod[j] == ' ') {
+                                        j++
+                                        lex = cod.substring(i, j)
+                                        return Token(lex,Token.PALABRA_RESERVADA, j)
+                                    }
                                 }
                             }
                         }
@@ -549,12 +597,15 @@ class AnalizadorLexico {
                             j++
                             if (cod[j] == 'e') {
                                 j++
-                                lex = cod.substring(i, j)
-                                return Token(
-                                    lex,
-                                    Token.PALABRA_RESERVADA,
-                                    j
-                                )
+                                if (cod.substring(i, cod.length).length == 5) {
+                                    lex = cod.substring(i, j)
+                                    return Token(lex, Token.PALABRA_RESERVADA, j)
+                                }
+                                if (cod[j] == ' ') {
+                                    j++
+                                    lex = cod.substring(i, j)
+                                    return Token(lex,Token.PALABRA_RESERVADA, j)
+                                }
                             }
                         }
                     }
@@ -590,12 +641,15 @@ class AnalizadorLexico {
                                     j++
                                     if (cod[j] == 'k') {
                                         j++
-                                        lex = cod.substring(i, j)
-                                        return Token(
-                                            lex,
-                                            Token.PALABRA_RESERVADA,
-                                            j
-                                        )
+                                        if (cod.substring(i, cod.length).length == 7) {
+                                            lex = cod.substring(i, j)
+                                            return Token(lex, Token.PALABRA_RESERVADA, j)
+                                        }
+                                        if (cod[j] == ' ') {
+                                            j++
+                                            lex = cod.substring(i, j)
+                                            return Token(lex,Token.PALABRA_RESERVADA, j)
+                                        }
                                     }
                                 }
                             }
@@ -627,12 +681,15 @@ class AnalizadorLexico {
                         j++
                         if (cod[j] == 'e') {
                             j++
-                            lex = cod.substring(i, j)
-                            return Token(
-                                lex,
-                                Token.PALABRA_RESERVADA,
-                                j
-                            )
+                            if (cod.substring(i, cod.length).length == 4) {
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.TIPO_DATO, j)
+                            }
+                            if (cod[j] == ' ') {
+                                j++
+                                lex = cod.substring(i, j)
+                                return Token(lex,Token.TIPO_DATO, j)
+                            }
                         }
                     }
                 }
@@ -661,12 +718,15 @@ class AnalizadorLexico {
                         j++
                         if (cod[j] == 'n') {
                             j++
-                            lex = cod.substring(i, j)
-                            return Token(
-                                lex,
-                                Token.PALABRA_RESERVADA,
-                                j
-                            )
+                            if (cod.substring(i, cod.length).length == 4) {
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.PALABRA_RESERVADA, j)
+                            }
+                            if (cod[j] == ' ') {
+                                j++
+                                lex = cod.substring(i, j)
+                                return Token(lex,Token.PALABRA_RESERVADA, j)
+                            }
                         }
                     }
                 }
@@ -695,12 +755,15 @@ class AnalizadorLexico {
                         j++
                         if (cod[j] == 'n') {
                             j++
-                            lex = cod.substring(i, j)
-                            return Token(
-                                lex,
-                                Token.PALABRA_RESERVADA,
-                                j
-                            )
+                            if (cod.substring(i, cod.length).length == 4) {
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.PALABRA_RESERVADA, j)
+                            }
+                            if (cod[j] == ' ') {
+                                j++
+                                lex = cod.substring(i, j)
+                                return Token(lex,Token.PALABRA_RESERVADA, j)
+                            }
                         }
                     }
                 }
@@ -729,12 +792,15 @@ class AnalizadorLexico {
                         j++
                         if (cod[j] == 'e') {
                             j++
-                            lex = cod.substring(i, j)
-                            return Token(
-                                lex,
-                                Token.PALABRA_RESERVADA,
-                                j
-                            )
+                            if (cod.substring(i, cod.length).length == 4) {
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.PALABRA_RESERVADA, j)
+                            }
+                            if (cod[j] == ' ') {
+                                j++
+                                lex = cod.substring(i, j)
+                                return Token(lex,Token.PALABRA_RESERVADA, j)
+                            }
                         }
                     }
                 }
@@ -764,12 +830,15 @@ class AnalizadorLexico {
                         j++
                         if (cod[j] == 'l') {
                             j++
-                            lex = cod.substring(i, j)
-                            return Token(
-                                lex,
-                                Token.PALABRA_RESERVADA,
-                                j
-                            )
+                            if (cod.substring(i, cod.length).length == 4) {
+                                lex = cod.substring(i, j)
+                                return Token(lex, Token.PALABRA_RESERVADA, j)
+                            }
+                            if (cod[j] == ' ') {
+                                j++
+                                lex = cod.substring(i, j)
+                                return Token(lex,Token.PALABRA_RESERVADA, j)
+                            }
                         }
                     }
                 }
@@ -790,7 +859,7 @@ class AnalizadorLexico {
     fun extraerTipoDatoSwitchCierre(cod: String, i: Int): Token? {
         var lex:String
         var j = i
-        if (cod.substring(i, cod.length).length >= 4) {
+        if (cod.substring(i, cod.length).length >= 6) {
             if (cod[j] == 'b') {
                 j++
                 if (cod[j] == 'r') {
@@ -803,12 +872,15 @@ class AnalizadorLexico {
                                 j++
                                 if (cod[j] == 'h') {
                                     j++
-                                    lex = cod.substring(i, j)
-                                    return Token(
-                                        lex,
-                                        Token.PALABRA_RESERVADA,
-                                        j
-                                    )
+                                    if (cod.substring(i, cod.length).length == 6) {
+                                        lex = cod.substring(i, j)
+                                        return Token(lex, Token.PALABRA_RESERVADA, j)
+                                    }
+                                    if (cod[j] == ' ') {
+                                        j++
+                                        lex = cod.substring(i, j)
+                                        return Token(lex,Token.PALABRA_RESERVADA, j)
+                                    }
                                 }
                             }
                         }
@@ -1033,12 +1105,15 @@ class AnalizadorLexico {
                             j++
                             if (cod[j] == 's') {
                                 j++
-                                lex = cod.substring(i, j)
-                                return Token(
-                                    lex,
-                                    Token.PALABRA_RESERVADA,
-                                    j
-                                )
+                                if (cod.substring(i, cod.length).length == 5) {
+                                    lex = cod.substring(i, j)
+                                    return Token(lex, Token.PALABRA_RESERVADA, j)
+                                }
+                                if (cod[j] == ' ') {
+                                    j++
+                                    lex = cod.substring(i, j)
+                                    return Token(lex,Token.PALABRA_RESERVADA, j)
+                                }
                             }
                         }
                     }
@@ -1074,12 +1149,15 @@ class AnalizadorLexico {
                                     j++
                                     if (cod[j] == 'e') {
                                         j++
-                                        lex = cod.substring(i, j)
-                                        return Token(
-                                            lex,
-                                            Token.PALABRA_RESERVADA,
-                                            j
-                                        )
+                                        if (cod.substring(i, cod.length).length == 7) {
+                                            lex = cod.substring(i, j)
+                                            return Token(lex, Token.PALABRA_RESERVADA, j)
+                                        }
+                                        if (cod[j] == ' ') {
+                                            j++
+                                            lex = cod.substring(i, j)
+                                            return Token(lex,Token.PALABRA_RESERVADA, j)
+                                        }
                                     }
                                 }
                             }
