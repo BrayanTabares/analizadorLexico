@@ -197,7 +197,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         if (tipo != null) {
             return tipo
         }
- /*       tipo = esIteracion()
+        tipo = esIteracion()
         if (tipo != null) {
             return tipo
         }
@@ -488,6 +488,6 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     fun esInvocacion(): Invocacion? {
-
+        return null
     }
 }
