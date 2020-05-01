@@ -1,6 +1,7 @@
 package Sintactico
 
 import Mundo.Token
+import kotlin.math.E
 
 class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     var posicionActual = 0
@@ -188,7 +189,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         if (tipo != null) {
             return tipo
         }
- /*       tipo = esLectura()
+        tipo = esLectura()
         if (tipo != null) {
             return tipo
         }
@@ -211,7 +212,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         tipo = esRetorno()
         if (tipo != null) {
             return tipo
-        }*/
+        }
         return null
     }
 
@@ -228,7 +229,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                     obtenerSiguienteToken()
                     return Declaracion(tipoDato, lista)
                 } else {
-
+                    reportarError("No se usó el operador terminal")
                 }
             }else{
 
@@ -244,14 +245,41 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         if (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
             val identificador: Token = tokenActual
             obtenerSiguienteToken()
-            if (tokenActual.darTipo() == Categoria.OPERADOR_ASIGNACION &&
-                tokenActual.darLexema() == "<"
-            ) {
+            if (tokenActual.darTipo() == Categoria.OPERADOR_ASIGNACION) {
+                obtenerSiguienteToken()
+                var expresion: Expresion? = esExpresion()
+                if (expresion!=null) {
+                    if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
+                        obtenerSiguienteToken()
+                        return Asignacion(identificador, expresion)
+                    }
+                }else {
+                    if (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
+                        var identificador2: Token = tokenActual
+                        obtenerSiguienteToken()
+                        if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
+                            obtenerSiguienteToken()
+                            return Asignacion(identificador, identificador2)
+                        }
+                    } else {
+                        var invocacion: Invocacion? = esInvocacion()
+                        if (expresion!=null) {
+                            if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
+                                obtenerSiguienteToken()
+                                return Asignacion(identificador,invocacion)
+                            }
+                        }else {
+
+                        }
+                    }
+                }
+            } else {
 
             }
         }
         return null;
     }
+
 
     /**
      * <Impresion> ::= “druken” “<” [<Expresion>] “>” “!”
@@ -375,5 +403,9 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
 
     fun esExpresionLogica(): ExpresionLogica? {
         return null
+    }
+
+    fun esInvocacion(): Invocacion? {
+
     }
 }

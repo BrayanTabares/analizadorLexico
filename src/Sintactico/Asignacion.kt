@@ -1,4 +1,7 @@
 package Sintactico
 
-class Asignacion : Sentencia() {
+import Mundo.Token
+
+
+class Asignacion (var identificador : Token, var expresion : Expresion): Sentencia() {
 }
