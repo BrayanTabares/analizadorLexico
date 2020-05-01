@@ -346,7 +346,7 @@ class AnalizadorLexico {
         var j = i
         var lex: String
         if (cod[j] == '|') {
-            j++
+                j++
             if (cod.length > j + 1 ) {
                 if(cod[j] == '&' && j + 2 < cod.length){
                     j++
@@ -483,6 +483,7 @@ class AnalizadorLexico {
                 }
             }
         }
+       
         return null
     }
 
