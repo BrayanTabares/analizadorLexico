@@ -197,7 +197,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         if (tipo != null) {
             return tipo
         }
-        tipo = esIteracion()
+ /*       tipo = esIteracion()
         if (tipo != null) {
             return tipo
         }
@@ -214,6 +214,88 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             return tipo
         }
         return null
+    }
+
+    /**
+     * <Invocacion Metodo> ::= <Invocacion Funcion> | <Invocacion Procedimiento> | <Lectura>
+     */
+     fun esInvocacionMetodo(): Sentencia? {
+        var tipo: Sentencia? = esInvocacionFuncion()
+        if (tipo != null){
+            return tipo
+        }
+      //  tipo = esInvocacionProcedimiento()
+        if (tipo != null){
+            return tipo
+        }
+        tipo = esLectura()
+        if (tipo != null){
+            return tipo
+        }
+        return null
+    }
+
+    /**
+     * <Invocacion Funcion> ::= <Indentificador> “<” [“:”<Lista Argumentos>] “>” | <Lectura>
+     */
+     fun esInvocacionFuncion(): Sentencia? {
+        if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                tokenActual.darLexema() == "<"){
+                obtenerSiguienteToken()
+                val listaArgumentos: ArrayList<Argumento>? = esListaArgumentos()
+                obtenerSiguienteToken()
+                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                    tokenActual.darLexema() == ">"){
+                   // no se como retornar la sentencia
+                    return null
+                }
+            }
+        }
+        var tipo: Sentencia? = esLectura()
+        if (tipo != null)
+        {
+            return tipo
+        }
+        return null
+    }
+
+    private fun esListaArgumentos(): ArrayList<Argumento>? {
+        return null
+    }
+
+    /**
+     * <lectura> ::= "lesen" "<" [<Expresion>] ">" "!"
+     */
+     fun esLectura(): Sentencia? {
+        if (tokenActual.darTipo() == Categoria.PALABRA_RESERVADA &&
+            tokenActual.darLexema()=="lesen") {
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                tokenActual.darLexema() == "<") {
+                obtenerSiguienteToken()
+                var expresion : Expresion? = esExpresion()
+                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                    tokenActual.darLexema() == ">"
+                ) {
+                    obtenerSiguienteToken()
+                    if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
+                        obtenerSiguienteToken()
+                        return Lectura(expresion)
+                    } else {
+
+                    }
+                } else {
+
+                }
+            } else {
+
+            }
+        }
+        return null
+
+
     }
 
     /**
