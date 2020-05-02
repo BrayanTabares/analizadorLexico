@@ -1,3 +1,5 @@
 package Sintactico
 
-class ExpresionCaracter :Expresion()
+import Mundo.Token
+
+class ExpresionCaracter(token: Token) :Expresion()

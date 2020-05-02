@@ -1,5 +1,5 @@
 package Sintactico
 
-class ValorExpresion : Valor() {
+open class ValorExpresion (var expresion: Expresion) : Valor() {
 
 }

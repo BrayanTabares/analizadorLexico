@@ -1,3 +1,5 @@
 package Sintactico
 
-class Argumento (var expresion: Expresion)
+class Argumento (var expresion: Expresion) {
+
+}

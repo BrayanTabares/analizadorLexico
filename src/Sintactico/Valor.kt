@@ -1,4 +1,5 @@
 package Sintactico
 
-open class Valor {
+open class Valor : ValorLogico() {
+
 }

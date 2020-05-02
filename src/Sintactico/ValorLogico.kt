@@ -1,3 +1,5 @@
 package Sintactico
 
-class ValorLogico
+open class ValorLogico () : ExpresionLogica(null,null,null) {
+
+}

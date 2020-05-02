@@ -1,4 +1,6 @@
 package Sintactico
 
-class ExpresionCadena : Expresion(){
+import Mundo.Token
+
+class ExpresionCadena(token: Token, valor: Valor?) : Expresion(){
 }
