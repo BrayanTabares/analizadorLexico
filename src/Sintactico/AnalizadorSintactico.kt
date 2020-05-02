@@ -412,19 +412,9 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Invocacion> ::= <Indentificador> “<” [<Lista Argumentos>] “>”
      */
     fun esValorInvocacion(): ValorInvocacion? {
-        if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
-            var invocacion: Token = tokenActual
-            obtenerSiguienteToken()
-            if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
-                tokenActual.darLexema() == "<"){
-                obtenerSiguienteToken()
-                var listaArgumentos: ArrayList<Argumento> = esListaArgumentos()
-                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
-                    tokenActual.darLexema() == ">"){
-                    obtenerSiguienteToken()
-                    return ValorInvocacion(invocacion, listaArgumentos)
-                }
-            }
+        var invocacion : InvocacionFuncion? = esInvocacionFuncion()
+        if(invocacion!=null){
+            return ValorInvocacion(invocacion)
         }
         return null
     }
@@ -469,29 +459,9 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <lectura> ::= "lesen" "<" [<Expresion>] ">" "!"
      */
     fun esValorLectura(): ValorLectura? {
-        if (tokenActual.darTipo() == Categoria.PALABRA_RESERVADA &&
-            tokenActual.darLexema()=="lesen") {
-            obtenerSiguienteToken()
-            if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
-                tokenActual.darLexema() == "<") {
-                obtenerSiguienteToken()
-                var expresion : Expresion? = esExpresion()
-                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
-                    tokenActual.darLexema() == ">"
-                ) {
-                    obtenerSiguienteToken()
-                    if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
-                        obtenerSiguienteToken()
-                        return ValorLectura(expresion)
-                    } else {
-
-                    }
-                } else {
-
-                }
-            } else {
-
-            }
+        var lectura : Lectura? = esLectura()
+        if(lectura!=null){
+            return ValorLectura(lectura)
         }
         return null
     }
@@ -821,7 +791,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                                         if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA && tokenActual.darLexema() == ")"
                                         ) {
                                             obtenerSiguienteToken()
-                                            return CondicionIf(sentencias, sentenciasElse)
+                                            return CondicionIf(expresionL,sentencias, sentenciasElse)
                                         } else {
 
                                         }
@@ -830,7 +800,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
 
                                     }
                                 }
-                                return CondicionIf(sentencias, sentenciasElse)
+                                return CondicionIf(expresionL, sentencias, sentenciasElse)
                             } else {
 
                             }

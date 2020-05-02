@@ -1,7 +1,16 @@
 package Sintactico
 
-class ValorLectura (var expresion : Expresion?) : Valor() {
+import javafx.scene.control.TreeItem
+
+class ValorLectura(var lectura: Lectura?) : Valor() {
     override fun toString(): String {
-        return "ValorLectura(expresion=$expresion)"
+        return "ValorLectura(lectura=$lectura)"
+    }
+
+    override fun getArbolVisual(): TreeItem<String> {
+        if(lectura!=null){
+            return lectura!!.getArbolVisual()
+        }
+        return TreeItem("Lectura Vacía")
     }
 }

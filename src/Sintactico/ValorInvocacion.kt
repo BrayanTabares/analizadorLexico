@@ -1,9 +1,13 @@
 package Sintactico
 
-import Mundo.Token
+import javafx.scene.control.TreeItem
 
-class ValorInvocacion (var identificador: Token, var listaArgumentos: ArrayList<Argumento>) : Valor() {
+class ValorInvocacion(var invocacion: InvocacionFuncion) : Valor() {
     override fun toString(): String {
-        return "ValorInvocacion(identificador=$identificador, listaArgumentos=$listaArgumentos)"
+        return "ValorInvocacion(${invocacion})"
+    }
+
+    override fun getArbolVisual(): TreeItem<String> {
+        return invocacion.getArbolVisual()
     }
 }
