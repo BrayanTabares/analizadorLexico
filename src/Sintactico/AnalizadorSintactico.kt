@@ -900,17 +900,17 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     *<Expresion Cadena> ::= <Cadena> [“$” <Valor>]
+     *<Expresion Cadena> ::= <Cadena> [“$” <ValorCadena>]
      */
     private fun esExpresionCadena(): ExpresionCadena? {
         if (tokenActual.darTipo() == Categoria.CADENA) {
             var token: Token = tokenActual
             obtenerSiguienteToken()
-            var valor: Valor? = null
+            var valor: ArrayList<ValorCadena> = ArrayList()
             if (tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO &&
                 tokenActual.darLexema() == "$"){
                 obtenerSiguienteToken()
-                valor = esValor()
+                valor = esValorCadena()
                 if(valor!=null){
                     obtenerSiguienteToken()
                     return ExpresionCadena(token, valor)
@@ -923,6 +923,25 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             return ExpresionCadena(token, valor)
         }
         return null
+    }
+
+    /**
+     * <Valor Cadena> ::= <Valor> [“$” <ValorCadena>]
+     */
+    private fun esValorCadena(): ArrayList<ValorCadena> {
+        var lista: ArrayList<ValorCadena> = ArrayList()
+        var f: Valor? = esValor()
+        while (f != null) {
+            lista.add(ValorCadena(f))
+            if (tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO &&
+                tokenActual.darLexema() == "$"){
+                obtenerSiguienteToken()
+                f=esValor()
+            } else {
+
+            }
+        }
+        return lista
     }
 
     /**
