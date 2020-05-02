@@ -1,4 +1,4 @@
 package Sintactico
 
-class Invocacion {
+open class Valor {
 }

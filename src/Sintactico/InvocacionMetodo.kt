@@ -1,4 +1,0 @@
-package Sintactico
-
-class InvocacionMetodo {
-}

@@ -1,5 +1,5 @@
 package Sintactico
 
-class CondicionIf (var sentencia: ArrayList<Sentencia>, var sentenciaElse: ArrayList<Sentencia>): Sentencia() {
+class CondicionIf (var sentencia: ArrayList<Sentencia>, var sentenciaElse: ArrayList<Sentencia>): Condicion() {
 
 }

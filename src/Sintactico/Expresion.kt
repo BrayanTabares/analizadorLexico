@@ -1,4 +1,4 @@
 package Sintactico
 
-open class Expresion {
+open class Expresion : Sentencia() {
 }
