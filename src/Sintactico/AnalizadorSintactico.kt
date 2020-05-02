@@ -1,6 +1,7 @@
 package Sintactico
 
 import Mundo.Token
+import sun.util.resources.cldr.et.CalendarData_et_EE
 import kotlin.math.E
 
 class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
@@ -479,12 +480,213 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         return null
     }
 
+    /**
+     * <Expresion> ::= <Expresion Aritmetica> | <Expresion Relacional> | <Expresion Logica> | <Expresion Cadena> | <Caracter>
+     */
     fun esExpresion(): Expresion? {
+        var tipo: Expresion? = esExpresionAritmetica()
+        if (tipo!= null){
+            return tipo
+        }
+        tipo = esExpresionRelacional()
+        if (tipo != null){
+            return tipo
+        }
+        tipo = esExpresionLogica()
+        if (tipo != null){
+            return tipo
+        }
+        tipo = esExpresionCadena()
+        if (tipo!= null){
+            return tipo
+        }
+        tipo  = esExpresionCaracter()
+        if (tipo != null)
+        {
+            return tipo
+        }
         return null
     }
 
-    fun esExpresionLogica(): ExpresionLogica? {
+    /**
+     * <Caracter> ::= “|” Caracter “|” | <Identificador>
+     */
+     fun esExpresionCaracter(): ExpresionCaracter?{
+        if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+            tokenActual.darLexema() =="|"){
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.CARACTER){
+                obtenerSiguienteToken()
+                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION
+                    && tokenActual.darLexema() == "|"){
+                    return ExpresionCaracter()
+                }
+            }
+        }
+        if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
+            //imprime
+            return ExpresionCaracter()
+
+        }
         return null
+    }
+
+    /**
+     *<Expresion Cadena> ::= <Cadena> [“$” <Expresion>]
+     */
+    private fun esExpresionCadena(): ExpresionCadena? {
+        if (tokenActual.darTipo() == Categoria.CADENA) {
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO &&
+                tokenActual.darLexema() == "$"){
+                var tipo: Expresion? = esExpresion()
+                if (tipo != null){
+                    return ExpresionCadena()
+                }
+
+            }else{
+                return ExpresionCadena()
+            }
+        }
+
+            return null
+    }
+
+    /**
+     * <Expresion Relacional> ::= "<"<Expresion Relacional>">" <Operador Relacional> <Expresion Relacional> | <Expresion Aritemetica> [<Operador Relacional> <Expresion Aritmetica>]
+     */
+     fun esExpresionRelacional(): ExpresionRelacional? {
+        var tipo: Expresion?
+        if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+            tokenActual.darLexema() == "<"){
+            obtenerSiguienteToken()
+           tipo = esExpresionRelacional()
+            if (tipo != null){
+                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                    tokenActual.darLexema()==">"){
+                    obtenerSiguienteToken()
+                   if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL){
+                       obtenerSiguienteToken()
+                       tipo = esExpresionRelacional()
+                       if (tipo != null){
+                           return ExpresionRelacional()
+                       }
+                   }
+                }
+            }
+        }
+        tipo = esExpresionAritmetica()
+        if (tipo != null){
+            if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL){
+                obtenerSiguienteToken()
+                tipo = esExpresionAritmetica()
+                if (tipo!= null){
+                    return ExpresionRelacional()
+                }
+            } else {
+                // En caso de que solo sea una expresion Aritmetica
+                return ExpresionRelacional()
+            }
+        }
+        return null
+
+
+    }
+
+    /**
+     * <Expresion Aritmetica> ::= "<"<Expresion Aritmetica>">" [<Operador Aritmetico> <Expresion Aritmetica>] | <Valor Numerico> [<Operador Aritmetico> <Expresion Aritmetica>]
+     */
+    fun esExpresionAritmetica(): ExpresionAritmetica? {
+        var tipo: Expresion?
+        if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+            tokenActual.darLexema() == "<"){
+            obtenerSiguienteToken()
+            tipo = esExpresionAritmetica()
+            if (tipo != null){
+                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION && tokenActual.darLexema() == ">"){
+                    obtenerSiguienteToken()
+                    if (tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO){
+                        obtenerSiguienteToken()
+                        tipo = esExpresionAritmetica()
+                        if (tipo != null){
+                            return ExpresionAritmetica()
+                        }
+                    }else {
+                        return ExpresionAritmetica()
+                    }
+
+                }
+
+            }
+
+        }
+        return null
+    }
+
+    /**
+     * <Expresion Logica> ::= "<"<Expresion Logica>">" [<Operador Logico> <Expresion Logica>] | <Valor Logico> [<Operador Logico> <Expresion Logica>] | <Operador Logico> <Expresion Logica>
+     */
+    fun esExpresionLogica(): ExpresionLogica? {
+        var tipo: Expresion?
+        if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+            tokenActual.darLexema() == "<"){
+            obtenerSiguienteToken()
+            tipo = esExpresionLogica()
+            if (tipo!= null){
+                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                    tokenActual.darLexema() == ">"){
+                    obtenerSiguienteToken()
+                    if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
+                        obtenerSiguienteToken()
+                        tipo = esExpresionLogica()
+                        if (tipo!= null){
+                            return ExpresionLogica()
+                        }
+                    } else{
+                        return ExpresionLogica()
+                    }
+                }
+            }
+        }
+        var verificacion: ValorLogico? = esValorLogico()
+        if (verificacion != null){
+            if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
+                obtenerSiguienteToken()
+                tipo = esExpresionLogica()
+                if (tipo!= null){
+                    return ExpresionLogica()
+                }
+            }
+        }
+        if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() == "/"){
+            obtenerSiguienteToken()
+            tipo = esExpresionLogica()
+            if (tipo!= null){
+                return ExpresionLogica()
+            }
+        }
+
+
+        return null
+    }
+
+    /**
+     * <Valor Logico> ::= “wahr” | “saum” | <Expresion Relacional> | <Indentificador>
+     */
+     fun esValorLogico(): ValorLogico? {
+        var tipo: Expresion?
+        if (tokenActual.darTipo() == Categoria.BOOLEAN){
+            return ValorLogico()
+        }
+        tipo = esExpresionRelacional()
+        if (tipo!= null){
+            return ValorLogico()
+        }
+        if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
+            return ValorLogico
+        }
+
+
     }
 
     fun esInvocacion(): Invocacion? {
