@@ -1059,14 +1059,10 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             return ValorLogico()
         }
         if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
-            return ValorLogico
+            return ValorLogico()
         }
-
-
-    }
-
-    fun esInvocacion(): Invocacion? {
         return null
     }
+
 
 }
