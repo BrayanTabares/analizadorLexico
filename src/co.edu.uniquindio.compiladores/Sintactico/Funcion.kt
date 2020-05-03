@@ -19,7 +19,7 @@ class Funcion (var nombre : Token, var parametros : ArrayList<Parametro>, var ti
         raiz.children.add(raizP)
 
         if(tipoDato!=null){
-            raiz.children.add(tipoDato?.getArbolVisual())
+            raiz.children.add(TreeItem("Tipo de Retorno: $tipoDato"))
         }
 
         var raizS = TreeItem("Sentencias")

@@ -1136,6 +1136,9 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         return null
     }
 
+    /**
+     *
+     */
     fun esTipoDato(): TipoDato? {
         if (tokenActual.darTipo() == Categoria.DATO_ENTERO ||
                 tokenActual.darTipo() == Categoria.DATO_REAL ||

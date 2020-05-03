@@ -285,8 +285,63 @@ class AnalizadorLexico(var codigoFuente:String) {
     }
     //falta
     fun esString():Boolean{
+        if(caracterActual == '|'){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
+
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+            if(caracterActual == '|'){
+
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+
+                while( caracterActual != '|' && caracterActual != finCodigo){
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    if(caracterActual == '&'){
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        if(caracterActual == 'n' || caracterActual == 's' || caracterActual == 't' || caracterActual == 'l'){
+                            lexema += caracterActual
+                            obtenerSiguienteCaracter()
+                        }
+                        else{
+                            hacerBT(posicionInicial,filaInicial,columnaInicial)
+                            return false
+                        }
+
+                    }
+                }
+                if(caracterActual == finCodigo){
+                    print("No cerro la cosa fin")
+                    hacerBT(posicionInicial,filaInicial,columnaInicial)
+                    return false
+                }
+
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                if(caracterActual== '|'){
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    almacenarToken(lexema,
+                        Categoria.CADENA,filaInicial,columnaInicial)
+                    return true
+                }
+                print("No cerro la cosa cosa")
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+                //reporta error hace bt
+
+            }
+            hacerBT(posicionInicial,filaInicial,columnaInicial)
+            return false
+        }
         return false
     }
+
     fun esDatoBoolean():Boolean{
         if(caracterActual == 'd'){
             var lexema = ""
@@ -418,8 +473,43 @@ class AnalizadorLexico(var codigoFuente:String) {
     }
     // primero hacer automata
     fun esOperadorRelacional():Boolean{
+        if(caracterActual == '=' || caracterActual == '/'|| caracterActual == '«'|| caracterActual == '»'){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
+
+            if(caracterActual == '=' || caracterActual == '/'){
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                if(caracterActual == '~'){
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+
+                    almacenarToken(lexema,
+                        Categoria.OPERADOR_ASIGNACION,filaInicial,columnaInicial)
+                    return true
+                }
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+            }
+
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+            if(caracterActual == '~')
+            {
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+
+            }
+            almacenarToken(lexema,
+                Categoria.OPERADOR_ASIGNACION,filaInicial,columnaInicial)
+            return true
+
+        }
         return false
     }
+
     fun esOperadorLogico():Boolean{
         if(caracterActual == '@' || caracterActual == '#'){
             var lexema = ""
