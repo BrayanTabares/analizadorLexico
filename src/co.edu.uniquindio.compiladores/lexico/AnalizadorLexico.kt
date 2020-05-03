@@ -64,6 +64,9 @@ class AnalizadorLexico(var codigoFuente:String) {
             if(esOperadorDecremento()) continue
             if(esPunto()) continue
             if(esDosPuntos()) continue
+            if(esRetorno()) continue
+            if(esLectura()) continue
+            if(esImpresion()) continue
 
             almacenarToken(""+caracterActual,
                 Categoria.DESCONOCIDO,filaActual,columnaActual)
@@ -487,7 +490,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                     obtenerSiguienteCaracter()
 
                     almacenarToken(lexema,
-                        Categoria.OPERADOR_ASIGNACION,filaInicial,columnaInicial)
+                        Categoria.OPERADOR_RELACIONAL,filaInicial,columnaInicial)
                     return true
                 }
                 hacerBT(posicionInicial,filaInicial,columnaInicial)
@@ -503,7 +506,7 @@ class AnalizadorLexico(var codigoFuente:String) {
 
             }
             almacenarToken(lexema,
-                Categoria.OPERADOR_ASIGNACION,filaInicial,columnaInicial)
+                Categoria.OPERADOR_RELACIONAL,filaInicial,columnaInicial)
             return true
 
         }
@@ -703,7 +706,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                         obtenerSiguienteCaracter()
 
                         almacenarToken(lexema,
-                                Categoria.OPERADOR_LOGICO,filaInicial,columnaInicial)
+                                Categoria.CASO,filaInicial,columnaInicial)
                         return true
                     }
                     hacerBT(posicionInicial,filaInicial,columnaInicial)
@@ -833,7 +836,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                                     obtenerSiguienteCaracter()
 
                                     almacenarToken(lexema,
-                                            Categoria.OPERADOR_LOGICO,filaInicial,columnaInicial)
+                                            Categoria.CICLO_WHILE,filaInicial,columnaInicial)
                                     return true
                                 }
                                 hacerBT(posicionInicial,filaInicial,columnaInicial)
@@ -1252,6 +1255,131 @@ class AnalizadorLexico(var codigoFuente:String) {
         return false
     }
 
+    fun esRetorno():Boolean{
+        if(caracterActual == 'e'){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
+
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+            if(caracterActual == 'r'){
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                if(caracterActual == 't'){
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    if(caracterActual == 'r'){
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        if(caracterActual == 'a'){
+                            lexema += caracterActual
+                            obtenerSiguienteCaracter()
+                            if(caracterActual == 'g'){
+                                lexema += caracterActual
+                                obtenerSiguienteCaracter()
+
+                                almacenarToken(lexema,
+                                    Categoria.RETORNO,filaInicial,columnaInicial)
+                                return true
+                            }
+                            hacerBT(posicionInicial,filaInicial,columnaInicial)
+                            return false
+                        }
+                        hacerBT(posicionInicial,filaInicial,columnaInicial)
+                        return false
+                    }
+                    hacerBT(posicionInicial,filaInicial,columnaInicial)
+                    return false
+                }
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+            }
+            hacerBT(posicionInicial,filaInicial,columnaInicial)
+            return false
+        }
+        return false
+    }
+
+    fun esImpresion():Boolean{
+        if(caracterActual == 'd'){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
+
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+            if(caracterActual == 'r'){
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                if(caracterActual == 'u'){
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    if(caracterActual == 'k'){
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        if(caracterActual == 'e'){
+                            lexema += caracterActual
+                            obtenerSiguienteCaracter()
+                            if(caracterActual == 'n'){
+                                lexema += caracterActual
+                                obtenerSiguienteCaracter()
+
+                                almacenarToken(lexema,
+                                    Categoria.IMPRESION,filaInicial,columnaInicial)
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false
+    }
+
+    fun esLectura():Boolean{
+        if(caracterActual == 'l'){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
+
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+            if(caracterActual == 'e'){
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                if(caracterActual == 's'){
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    if(caracterActual == 'e'){
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        if(caracterActual == 'n'){
+                            lexema += caracterActual
+                            obtenerSiguienteCaracter()
+
+                            almacenarToken(lexema,
+                                Categoria.LECTURA,filaInicial,columnaInicial)
+                            return true
+                        }
+                        hacerBT(posicionInicial,filaInicial,columnaInicial)
+                        return false
+                    }
+                    hacerBT(posicionInicial,filaInicial,columnaInicial)
+                    return false
+                }
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+            }
+            hacerBT(posicionInicial,filaInicial,columnaInicial)
+            return false
+        }
+        return false
+    }
+
     fun obtenerSiguienteCaracter(){
         if(posicionActual == codigoFuente.length-1) {
             caracterActual = finCodigo
@@ -1267,4 +1395,6 @@ class AnalizadorLexico(var codigoFuente:String) {
         }
 
     }
+
+
 }
