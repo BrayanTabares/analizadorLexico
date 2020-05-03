@@ -165,6 +165,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         while (f != null) {
             lista.add(f)
             f = esSentencia()
+            esBreak()
         }
         return lista
     }
