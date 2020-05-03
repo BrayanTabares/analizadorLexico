@@ -10,7 +10,7 @@ class CondicionSwitch(var expresion: Expresion, var listaCasos: ArrayList<Caso>)
     override fun getArbolVisual(): TreeItem<String> {
         var raiz = TreeItem("Condicion Switch")
 
-        raiz.children.add(TreeItem("${expresion.getArbolVisual()}"))
+        raiz.children.add(expresion.getArbolVisual())
 
         var raizS = TreeItem("Lista Casos")
         for (f in listaCasos){

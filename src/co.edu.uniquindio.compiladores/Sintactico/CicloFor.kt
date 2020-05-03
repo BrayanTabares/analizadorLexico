@@ -15,7 +15,7 @@ class CicloFor(var inicializacion: Inicializacion?,var expresionRelacional: Expr
 
         raiz.children.add(expresionRelacional.getArbolVisual())
 
-        raiz.children.add(incremento.getArbolVisual())
+        raiz.children.add(TreeItem("Incremento: $incremento"))
 
         var raizS = TreeItem("Sentencias")
         for (f in sentencias){

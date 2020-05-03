@@ -551,6 +551,15 @@ class AnalizadorLexico(var codigoFuente:String) {
                 return false
             }
         }
+        if(caracterActual == '/'){
+            var lexema = "/"
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            almacenarToken(lexema,
+                Categoria.OPERADOR_LOGICO,filaInicial,columnaInicial)
+            obtenerSiguienteCaracter()
+            return true
+        }
         return false
     }
     fun esComentarioBloque():Boolean{

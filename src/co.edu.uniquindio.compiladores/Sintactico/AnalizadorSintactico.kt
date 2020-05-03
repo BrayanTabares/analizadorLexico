@@ -165,6 +165,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         while (f != null) {
             lista.add(f)
             f = esSentencia()
+            esBreak()
         }
         return lista
     }
@@ -174,55 +175,85 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      */
     fun esSentencia(): Sentencia? {
         var token: Token = tokenActual
+        var pos: Int = posicionActual
         var tipo: Sentencia? = esCondicion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esDeclaracion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esInicializacion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esImpresion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esAsignacion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esLectura()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esInvocacionFuncion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esIterador()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esIncremento()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esRetorno()
         if (tipo != null) {
             return tipo
         }
+        tokenActual=token
+        posicionActual=pos
+        tipo = esDeclaracionArreglo()
+        if (tipo!= null){
+            return tipo
+        }
+        tokenActual=token
+        posicionActual=pos
+        tipo= esInicializacionArreglo()
+        if (tipo!= null){
+            return tipo
+        }
+        tokenActual=token
+        posicionActual=pos
+        tipo= esAgregacionDatoArreglo()
+        if(tipo!= null){
+            return tipo
+        }
+        tokenActual=token
+        posicionActual=pos
         return null
     }
 
@@ -233,7 +264,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         if (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
             val identificador: Token = tokenActual
             obtenerSiguienteToken()
-            if (tokenActual.darTipo() == Categoria.OPERADOR_INCREMENTO || tokenActual.darTipo() == Categoria.OPERADOR_DECREMENTO ) {
+            if (tokenActual.darTipo() == Categoria.OPERADOR_INCREMENTO || tokenActual.darTipo() == Categoria.OPERADOR_DECREMENTO) {
                 val tipoIncremento: Token = tokenActual
                 obtenerSiguienteToken()
                 if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
@@ -269,14 +300,20 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Iteracion> ::= <Ciclo While> | <Ciclo For>
      */
     fun esIterador(): Iterador? {
+        val token : Token = tokenActual
+        val posicion : Int = posicionActual
         var tipo: Iterador? = esCicloFor()
         if (tipo != null){
             return tipo
         }
+        tokenActual = token
+        posicionActual = posicion
         tipo = esCicloWhile()
         if (tipo != null){
             return tipo
         }
+        tokenActual = token
+        posicionActual = posicion
         return null
     }
 
@@ -284,9 +321,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Ciclo While> ::= “reprise” “<” <Expresion Logica> “>” “(”  [<Lista Sentencias>] “)”
      */
     fun esCicloWhile(): CicloWhile? {
-        if (tokenActual.darTipo() == Categoria.CICLO_WHILE &&
-            tokenActual.darLexema() == "reprise"
-        ) {
+        if (tokenActual.darTipo() == Categoria.CICLO_WHILE) {
             obtenerSiguienteToken()
             if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                 tokenActual.darLexema() == "<"
@@ -370,7 +405,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                             reportarError("Falta incremento de ciclo for")
                         }
                     } else {
-                        reportarError("Falta terminal de expresión relacional ciclo for")
+                        reportarError("Falta terminal de expresión relacional ciclo for "+tokenActual.darLexema())
                     }
                 } else {
                     reportarError("Falta expresión relacional de ciclo for")
@@ -398,7 +433,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                     obtenerSiguienteToken()
                     return InvocacionFuncion(invocacion, listaArgumentos)
                 }else{
-                    reportarError("Falta cierre de invocación")
+                    reportarError("Falta cierre de invocación" + tokenActual.darLexema())
                 }
             }
         }
@@ -554,26 +589,38 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Valor> ::= <Identificador> | <Expresion> | <Invocacion Funcion>
      */
     fun esValor(): Valor? {
+        val posicion : Int = posicionActual
+        val token: Token = tokenActual
         var tipo: Valor? = esValorInvocacion()
-        var token: Token = tokenActual
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esValorExpresion()
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esIdentificador()
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esValorLectura()
         if (tipo != null){
             return tipo
         }
+        tokenActual=token
+        posicionActual=posicion
+        tipo= esObtencionDatoArreglo()
+        if(tipo!= null){
+            return tipo
+        }
+        tokenActual=token
+        posicionActual=posicion
         return null
     }
 
@@ -616,12 +663,13 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         val lista: ArrayList<Token> = ArrayList()
         while (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
             val identificador: Token = tokenActual
+            lista.add(identificador)
             obtenerSiguienteToken()
             if (tokenActual.darTipo() == Categoria.OPERADOR_SEPARACION) {
                 obtenerSiguienteToken()
-                lista.add(identificador)
-            } else {
-                break
+               if(tokenActual.darTipo() != Categoria.IDENTIFICADOR){
+                   reportarError("Falta identificador a concatenar")
+               }
             }
         }
         return lista
@@ -812,10 +860,10 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                             reportarError("Falta apertura de bloque de sentencia de if")
                         }
                     } else {
-                        reportarError("Falta cierre de expresión de if")
+                        reportarError("Falta cierre de expresión de if"+tokenActual.darLexema())
                     }
                 } else {
-                    reportarError("Falta expresión de if")
+                    reportarError("Falta expresión de if ")
                 }
             } else {
                 reportarError("Falta apertura de expresión de if")
@@ -828,31 +876,38 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Expresion> ::= <Expresion Aritmetica> | <Expresion Relacional> | <Expresion Logica> | <Expresion Cadena> | <Caracter>
      */
     fun esExpresion(): Expresion? {
-        var token:Token=tokenActual
+        val token:Token=tokenActual
+        val posicion : Int = posicionActual
         var tipo: Expresion? = esExpresionAritmetica()
         if (tipo!= null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esExpresionRelacional()
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esExpresionLogica()
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esExpresionCadena()
         if (tipo!= null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo  = esExpresionCaracter()
         if (tipo != null) {
             return tipo
         }
+        tokenActual=token
+        posicionActual=posicion
         return null
     }
 
@@ -889,7 +944,6 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 obtenerSiguienteToken()
                 valor = esValorCadena()
                 if(valor.size > 0){
-                    obtenerSiguienteToken()
                     return ExpresionCadena(token, valor)
                 } else {
                     reportarError("Falta valor de concatenación de cadena")
@@ -908,6 +962,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         var f: Valor? = esValor()
         while (f != null) {
             lista.add(ValorCadena(f))
+            f=null
             if (tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO &&
                 tokenActual.darLexema() == "$") {
                 obtenerSiguienteToken()
@@ -921,7 +976,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Expresion Relacional> ::= "<"<Expresion Relacional>">" <Operador Relacional> <Expresion Relacional> | <Expresion Aritemetica> [<Operador Relacional> <Expresion Relacional>]
+     * <Expresion Relacional> ::= "<"<Expresion Relacional>">" [<Operador Relacional> <Expresion Relacional2>] | <Expresion Aritemetica> <Operador Relacional> <Expresion Relacional2>
      */
      fun esExpresionRelacional(): ExpresionRelacional? {
         if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
@@ -935,16 +990,14 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                    if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL){
                        val operador: Token = tokenActual
                        obtenerSiguienteToken()
-                       val expresion2: Expresion? = esExpresionRelacional()
+                       val expresion2: Expresion? = esExpresionRelacional2()
                        if (expresion2 != null){
-                           obtenerSiguienteToken()
                            return ExpresionRelacional(expresion1,operador,expresion2)
                        } else {
                            reportarError("Falta expresión a relacionar")
                        }
-                   } else {
-                       reportarError("Falta operador relacional")
                    }
+                    return ExpresionRelacional(expresion1,null,null)
                 } else {
                     reportarError("Falta cerrar la agrupación de expresión")
                 }
@@ -955,14 +1008,60 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL){
                 val operador: Token = tokenActual
                 obtenerSiguienteToken()
-                val expresion2: Expresion? = esExpresionRelacional()
+                val expresion2: Expresion? = esExpresionRelacional2()
+                if (expresion2 != null){
+                    return ExpresionRelacional(expresion1,operador,expresion2)
+                } else {
+                    reportarError("Falta expresión a relacionar")
+                }
+            } else {
+                reportarError("Falta operador relacional")
+            }
+        }
+        return null
+    }
+
+    /**
+     * <Expresion Relacional2> ::= "<"<Expresion Relacional>">" [<Operador Relacional> <Expresion Relacional2>] | <Expresion Aritemetica> [<Operador Relacional> <Expresion Relacional2>]
+     */
+    fun esExpresionRelacional2(): ExpresionRelacional? {
+        if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+            tokenActual.darLexema() == "<"){
+            obtenerSiguienteToken()
+            val expresion1: Expresion? = esExpresionRelacional()
+            if (expresion1 != null){
+                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                    tokenActual.darLexema()==">"){
+                    obtenerSiguienteToken()
+                    if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL){
+                        val operador: Token = tokenActual
+                        obtenerSiguienteToken()
+                        val expresion2: Expresion? = esExpresionRelacional2()
+                        if (expresion2 != null){
+                            return ExpresionRelacional(expresion1,operador,expresion2)
+                        } else {
+                            reportarError("Falta expresión a relacionar")
+                        }
+                    }
+                    return ExpresionRelacional(expresion1,null,null)
+                } else {
+                    reportarError("Falta cerrar la agrupación de expresión")
+                }
+            }
+        }
+        val expresion1: Expresion? = esExpresionAritmetica()
+        if (expresion1 != null){
+            if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL){
+                val operador: Token = tokenActual
+                obtenerSiguienteToken()
+                val expresion2: Expresion? = esExpresionRelacional2()
                 if (expresion2 != null){
                     return ExpresionRelacional(expresion1,operador,expresion2)
                 } else {
                     reportarError("Falta expresión a relacionar")
                 }
             }
-            return ExpresionRelacional(expresion1, null, null)
+            return ExpresionRelacional(expresion1,null,null)
         }
         return null
     }
@@ -992,7 +1091,6 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         obtenerSiguienteToken()
                         val expresion2: ExpresionAritmetica? = esExpresionAritmetica()
                         if (expresion2 != null){
-                            obtenerSiguienteToken()
                             return ExpresionAritmetica(expresion1,operador,expresion2)
                         } else {
                             reportarError("Falta expresión a relacionar")
@@ -1038,11 +1136,12 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         obtenerSiguienteToken()
                         val expresion2: ExpresionLogica? = esExpresionLogica()
                         if (expresion2!= null){
-                            obtenerSiguienteToken()
                             return ExpresionLogica(expresion1, operador, expresion2)
                         } else {
                             reportarError("Falta expresión a operar")
                         }
+                    } else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() == "/"){
+                        reportarError("El operador / es Unario")
                     }
                     return ExpresionLogica(expresion1, null, null)
                 } else {
@@ -1057,11 +1156,12 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 obtenerSiguienteToken()
                 val expresion2: ExpresionLogica? = esExpresionLogica()
                 if (expresion2!= null){
-                    obtenerSiguienteToken()
                     return ExpresionLogica(valor, operador, expresion2)
                 } else {
                     reportarError("Falta expresión a operar")
                 }
+            } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() == "/"){
+                reportarError("El operador / es unario")
             }
             return valor
         }
@@ -1074,6 +1174,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             } else {
                 reportarError("Falta expresión a operar")
             }
+        } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() != "/") {
+            reportarError("El operador ${tokenActual.darLexema()} es binario")
         }
         return null
     }
@@ -1082,21 +1184,26 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Valor Logico> ::= “wahr” | “saum” | <Expresion Relacional> | <Indentificador>
      */
      fun esValorLogico(): ValorLogico? {
-        var token:Token=tokenActual
+        val posicion : Int = posicionActual
+        val token: Token = tokenActual
         var valor: Valor? = esValorBooleano()
         if (valor!= null){
             return valor
         }
         tokenActual=token
+        posicionActual = posicion
         valor = esValorRelacional()
         if (valor!= null){
             return valor
         }
         tokenActual=token
+        posicionActual=posicion
         valor = esIdentificador()
         if (valor!= null){
             return valor
         }
+        tokenActual=token
+        posicionActual=posicion
         return null
     }
 
@@ -1150,33 +1257,6 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             return TipoDato(valor)
         }
         return null
-    }
-
-    /**
-     * <Comando Arreglo>  ::= <Declarar Arreglo> | <Inicializar Arreglo> | <Agregar Dato> | <Obtener Dato>
-     */
-    fun esComandoArreglo (): ComandoArreglo? {
-        var token : Token = tokenActual
-        var tipo: ComandoArreglo? = esDeclaracionArreglo()
-        if (tipo!= null){
-            return tipo
-        }
-        tokenActual=token
-        tipo= esInicializacionArreglo()
-        if (tipo!= null){
-            return tipo
-        }
-        tokenActual = token
-        tipo= esAgregacionDatoArreglo()
-        if(tipo!= null){
-            return tipo
-        }
-        tokenActual = token
-        tipo= esObtencionDatoArreglo()
-        if(tipo!= null){
-            return tipo
-        }
-        return tipo
     }
 
     /**

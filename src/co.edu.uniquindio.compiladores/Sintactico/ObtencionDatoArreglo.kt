@@ -2,7 +2,7 @@ package co.edu.uniquindio.compiladores.Sintactico
 import co.edu.uniquindio.compiladores.lexico.Token
 import javafx.scene.control.TreeItem
 
-class ObtencionDatoArreglo (var nombre: Token, var posicion: ValorNumerico ):ComandoArreglo(){
+class ObtencionDatoArreglo (var nombre: Token, var posicion: ValorNumerico ):Valor(){
     override fun toString(): String {
         return "Obtencion de un dato del arreglo ( nombre= $nombre, posicion= $posicion"
     }

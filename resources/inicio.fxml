@@ -1,21 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="492.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.compiladores.controladores.InicioController">
+<AnchorPane prefHeight="568.0" prefWidth="727.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.compiladores.controladores.InicioController">
    <children>
-      <Button fx:id="btnCambiar" layoutX="552.0" layoutY="37.0" mnemonicParsing="false" onAction="#analizarCodigo" prefHeight="38.0" prefWidth="148.0" text="Analizar codigo" />
-      <TableView fx:id="tablaTokens" layoutX="30.0" layoutY="262.0" prefHeight="200.0" prefWidth="496.0">
-        <columns>
-          <TableColumn fx:id="colLexema" prefWidth="158.0" text="Lexema" />
-          <TableColumn fx:id="colCategoria" prefWidth="119.0" text="Categoria" />
-            <TableColumn fx:id="colFila" prefWidth="114.0" text="Fila" />
-            <TableColumn fx:id="colColumna" prefWidth="98.0" text="Columna" />
-        </columns>
-      </TableView>
-      <TextArea fx:id="codigoFuente" layoutX="38.0" layoutY="37.0" prefHeight="211.0" prefWidth="486.0" />
-      <TreeView fx:id="arbolVisual" layoutX="536.0" layoutY="86.0" prefHeight="377.0" prefWidth="179.0" />
+      <Button fx:id="btnCambiar" layoutX="544.0" layoutY="100.0" mnemonicParsing="false" onAction="#analizarCodigo" prefHeight="38.0" prefWidth="148.0" text="Analizar codigo" />
+      <TextArea fx:id="codigoFuente" layoutX="20.0" layoutY="100.0" prefHeight="211.0" prefWidth="496.0" />
+      <TreeView fx:id="arbolVisual" layoutX="528.0" layoutY="149.0" prefHeight="407.0" prefWidth="179.0" />
+      <TabPane layoutX="20.0" layoutY="325.0" prefHeight="230.0" prefWidth="496.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Analizador Lexico">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="182.0" prefWidth="496.0">
+                     <children>
+                        <TableView fx:id="tablaTokens" prefHeight="200.0" prefWidth="496.0">
+                          <columns>
+                            <TableColumn fx:id="colLexema" prefWidth="158.0" text="Lexema" />
+                            <TableColumn fx:id="colCategoria" prefWidth="119.0" text="Categoria" />
+                              <TableColumn fx:id="colFila" prefWidth="114.0" text="Fila" />
+                              <TableColumn fx:id="colColumna" prefWidth="104.0" text="Columna" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Errores Lexicos">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tablaErroresL" prefHeight="200.0" prefWidth="496.0">
+                           <columns>
+                              <TableColumn fx:id="colErrorL" prefWidth="370.0" text="Mensaje Error" />
+                              <TableColumn fx:id="colFilaL" prefWidth="62.0" text="Fila" />
+                              <TableColumn fx:id="colColumnaL" minWidth="9.0" prefWidth="63.0" text="Columna" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Errores Sintacticos">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tablaErroresS" prefHeight="200.0" prefWidth="496.0">
+                           <columns>
+                              <TableColumn fx:id="colErrorS" prefWidth="370.0" text="Mensaje Error" />
+                              <TableColumn fx:id="colFilaS" prefWidth="62.0" text="Fila" />
+                              <TableColumn fx:id="colColumnaS" minWidth="9.0" prefWidth="63.0" text="Columna" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <Pane prefHeight="71.0" prefWidth="727.0" style="-fx-background-color: #121212;">
+         <children>
+            <Text fill="WHITE" layoutX="258.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Compilador" wrappingWidth="225.13671875">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="imageI" fitHeight="71.0" fitWidth="210.0" layoutX="28.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageD" fitHeight="71.0" fitWidth="210.0" layoutX="492.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageI2" fitHeight="71.0" fitWidth="88.0" layoutX="45.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageI21" fitHeight="71.0" fitWidth="88.0" layoutX="141.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageD21" fitHeight="71.0" fitWidth="88.0" layoutX="614.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageD2" fitHeight="71.0" fitWidth="88.0" layoutX="518.0" pickOnBounds="true" preserveRatio="true" />
+         </children></Pane>
    </children>
 </AnchorPane>

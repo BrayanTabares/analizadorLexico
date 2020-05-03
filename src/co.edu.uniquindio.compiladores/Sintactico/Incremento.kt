@@ -5,7 +5,7 @@ import javafx.scene.control.TreeItem
 
 class Incremento(var nombre: Token, var tipoIncremento: Token) : Sentencia() {
     override fun toString(): String {
-        return "Incremento(nombre=$nombre, tipoIncremento=$tipoIncremento)"
+        return "${nombre.darLexema()}"+""+"${tipoIncremento.darLexema()}"
     }
 
     override fun getArbolVisual(): TreeItem<String> {
