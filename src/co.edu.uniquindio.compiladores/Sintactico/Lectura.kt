@@ -10,7 +10,7 @@ class Lectura (var expresion : Expresion?) : Sentencia() {
     override fun getArbolVisual(): TreeItem<String> {
         var raiz:TreeItem<String> = TreeItem("Lectura")
         if(expresion!=null){
-            raiz.children.add(TreeItem("${expresion?.getArbolVisual()}"))
+            raiz.children.add(expresion?.getArbolVisual())
         }
         return raiz
     }

@@ -165,7 +165,9 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         while (f != null) {
             lista.add(f)
             f = esSentencia()
-            esBreak()
+            if(esBreak()&& tokenActual.darTipo() != Categoria.BLOQUE_SENTENCIA ){
+                reportarError("Las lineas después del brunch no son leídas")
+            }
         }
         return lista
     }
