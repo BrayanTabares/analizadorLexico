@@ -47,6 +47,10 @@ class InicioController: Initializable{
 
     @FXML
     fun analizarCodigo(e: ActionEvent){
+        tablaTokens.items = null
+        tablaErroresL.items = null
+        tablaErroresS.items = null
+        arbolVisual.root = null
          if(codigoFuente.text.length > 0){
              val lexico = AnalizadorLexico(codigoFuente.text)
              lexico.analizar()

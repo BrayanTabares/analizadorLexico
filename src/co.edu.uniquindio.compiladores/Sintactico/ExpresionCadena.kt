@@ -13,11 +13,13 @@ class ExpresionCadena(var cadena: Token, var  valor: ArrayList<ValorCadena>) : E
 
         raiz.children.add(TreeItem("Cadena: ${cadena.darLexema()}"))
 
-        var raizV : TreeItem<String> = TreeItem("Valores")
-        for (f in valor){
-            raizV.children.add(f.getArbolVisual())
+        if(valor.size>0){
+            var raizV : TreeItem<String> = TreeItem("Valores")
+            for (f in valor){
+                raizV.children.add(f.getArbolVisual())
+            }
+            raiz.children.add(raizV)
         }
-        raiz.children.add(raizV)
         return raiz
     }
 }
