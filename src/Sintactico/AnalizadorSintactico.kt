@@ -480,6 +480,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                     return Declaracion(tipoDato, lista)
                 } else {
                     reportarError("No se usó el operador terminal")
+                    var hola = arrayListOf<Integer>()
                 }
             }else{
 
@@ -1119,6 +1120,160 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         return null
     }
 
+    /**
+     * <Comando Arreglo>  ::= <Declarar Arreglo> | <Inicializar Arreglo> | <Agregar Dato> | <Obtener Dato>
+     */
+    fun esComandoArreglo (): ComandoArreglo? {
+        var tipo: ComandoArreglo? = esDeclaracionArreglo()
+        if (tipo!= null){
+            return tipo
+        }
+        tipo= esInicializacionArreglo()
+        if (tipo!= null){
+            return tipo
+        }
+        tipo= esAgregacionDatoArreglo()
+        if(tipo!= null){
+            return tipo
+        }
+        tipo= esObtencionDatoArreglo()
+        return tipo
+    }
+
+    /**
+     * <Obtener Dato> ::=  <Identificador> “[“ <Valor Numerico> “]” "!"
+     */
+    private fun esObtencionDatoArreglo(): ObtencionDatoArreglo? {
+        if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
+            var nombre: Token = tokenActual
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                tokenActual.darLexema() == "("){
+                obtenerSiguienteToken()
+                var posicion: ValorNumerico? = esValorNumerico()
+                if (posicion != null){
+                    if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                        tokenActual.darLexema() == ")"){
+                        obtenerSiguienteToken()
+                        if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL &&
+                            tokenActual.darLexema() == "!"){
+                            return ObtencionDatoArreglo(nombre,posicion)
+                        }
+                    }
+                }
+            }
+
+        }
+    return null
+    }
+
+    /**
+     * <Agregar Dato> ::= <Identificador> “[“ <Valor Numerico> “]” “~” <Valor> “!”
+     */
+    private fun esAgregacionDatoArreglo(): AgregacionDatoArreglo?{
+        if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
+            var tipo: Token = tokenActual
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                tokenActual.darLexema() == "("){
+                obtenerSiguienteToken()
+                var posicion: ValorNumerico? = esValorNumerico()
+                if (posicion != null){
+                    if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                        tokenActual.darLexema() == ")"){
+                        obtenerSiguienteToken()
+                        if (tokenActual.darTipo() == Categoria.OPERADOR_ASIGNACION){
+                            obtenerSiguienteToken()
+                            var valor: Valor? = esValor()
+                            if (valor != null){
+                                if (tokenActual.darTipo() ==Categoria.OPERADOR_TERMINAL){
+                                    return AgregacionDatoArreglo(tipo,posicion,valor)
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null
+
+    }
+
+    /**
+     *<Inicializar Arreglo>::=  <tipo de dato> “(“”)”  <Identificador> “~” <Tipo Dato>  “[“ <Valor Numerico> “]” “!”
+     */
+    private fun esInicializacionArreglo(): InicializacionArreglo?{
+        if (tokenActual.darTipo() == Categoria.TIPO_DATO){
+            var tipoDato: Token =tokenActual
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                tokenActual.darLexema() == "("){
+                obtenerSiguienteToken()
+                if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                    tokenActual.darLexema() == ")"){
+                    obtenerSiguienteToken()
+                    if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
+                        var nombre: Token = tokenActual
+                        if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL){
+                            obtenerSiguienteToken()
+                            if (tokenActual.darTipo() == Categoria.OPERADOR_ASIGNACION){
+                                obtenerSiguienteToken()
+                                if (tokenActual.darTipo() == Categoria.TIPO_DATO){
+                                    obtenerSiguienteToken()
+                                    if (tokenActual.darTipo() ==Categoria.BLOQUE_SENTENCIA &&
+                                        tokenActual.darLexema() == "("){
+                                        obtenerSiguienteToken()
+                                        var cantidad: ValorNumerico? = esValorNumerico()
+                                        if (cantidad != null){
+                                            if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                                                tokenActual.darLexema() == ")"){
+                                                obtenerSiguienteToken()
+                                                if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL){
+                                                    return InicializacionArreglo(tipoDato,cantidad,nombre)
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+    /**
+     * <Declarar Arreglo> ::=  <tipo de dato> “(“”)” <identificador>
+     */
+    private fun esDeclaracionArreglo(): DeclaracionArreglo?{
+        if (tokenActual.darTipo() == Categoria.TIPO_DATO){
+            var tipoDato: Token =tokenActual
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                tokenActual.darLexema() == "("){
+                obtenerSiguienteToken()
+                if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA &&
+                    tokenActual.darLexema() == ")"){
+                    obtenerSiguienteToken()
+                    if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
+                        var nombre: Token = tokenActual
+                        if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL){
+                            obtenerSiguienteToken()
+                            return DeclaracionArreglo(tipoDato,nombre)
+
+                        }
+                    }
+                }
+            }
+        }
+        return null
+
+    }
 
 
 }
