@@ -174,55 +174,67 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      */
     fun esSentencia(): Sentencia? {
         var token: Token = tokenActual
+        var pos: Int = posicionActual
         var tipo: Sentencia? = esCondicion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esDeclaracion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esInicializacion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esImpresion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esAsignacion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esLectura()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esInvocacionFuncion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esIterador()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esIncremento()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
+        posicionActual=pos
         tipo = esRetorno()
         if (tipo != null) {
             return tipo
         }
+        tokenActual=token
+        posicionActual=pos
         return null
     }
 
@@ -233,7 +245,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         if (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
             val identificador: Token = tokenActual
             obtenerSiguienteToken()
-            if (tokenActual.darTipo() == Categoria.OPERADOR_INCREMENTO || tokenActual.darTipo() == Categoria.OPERADOR_DECREMENTO ) {
+            if (tokenActual.darTipo() == Categoria.OPERADOR_INCREMENTO || tokenActual.darTipo() == Categoria.OPERADOR_DECREMENTO) {
                 val tipoIncremento: Token = tokenActual
                 obtenerSiguienteToken()
                 if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
@@ -269,14 +281,20 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Iteracion> ::= <Ciclo While> | <Ciclo For>
      */
     fun esIterador(): Iterador? {
+        val token : Token = tokenActual
+        val posicion : Int = posicionActual
         var tipo: Iterador? = esCicloFor()
         if (tipo != null){
             return tipo
         }
+        tokenActual = token
+        posicionActual = posicion
         tipo = esCicloWhile()
         if (tipo != null){
             return tipo
         }
+        tokenActual = token
+        posicionActual = posicion
         return null
     }
 
@@ -284,9 +302,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Ciclo While> ::= “reprise” “<” <Expresion Logica> “>” “(”  [<Lista Sentencias>] “)”
      */
     fun esCicloWhile(): CicloWhile? {
-        if (tokenActual.darTipo() == Categoria.CICLO_WHILE &&
-            tokenActual.darLexema() == "reprise"
-        ) {
+        if (tokenActual.darTipo() == Categoria.CICLO_WHILE) {
             obtenerSiguienteToken()
             if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                 tokenActual.darLexema() == "<"
@@ -398,7 +414,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                     obtenerSiguienteToken()
                     return InvocacionFuncion(invocacion, listaArgumentos)
                 }else{
-                    reportarError("Falta cierre de invocación")
+                    reportarError("Falta cierre de invocación" + tokenActual.darLexema())
                 }
             }
         }
@@ -554,26 +570,32 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Valor> ::= <Identificador> | <Expresion> | <Invocacion Funcion>
      */
     fun esValor(): Valor? {
+        val posicion : Int = posicionActual
+        val token: Token = tokenActual
         var tipo: Valor? = esValorInvocacion()
-        var token: Token = tokenActual
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esValorExpresion()
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esIdentificador()
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esValorLectura()
         if (tipo != null){
             return tipo
         }
+        tokenActual=token
+        posicionActual=posicion
         return null
     }
 
@@ -616,12 +638,13 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         val lista: ArrayList<Token> = ArrayList()
         while (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
             val identificador: Token = tokenActual
+            lista.add(identificador)
             obtenerSiguienteToken()
             if (tokenActual.darTipo() == Categoria.OPERADOR_SEPARACION) {
                 obtenerSiguienteToken()
-                lista.add(identificador)
-            } else {
-                break
+               if(tokenActual.darTipo() != Categoria.IDENTIFICADOR){
+                   reportarError("Falta identificador a concatenar")
+               }
             }
         }
         return lista
@@ -828,31 +851,38 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Expresion> ::= <Expresion Aritmetica> | <Expresion Relacional> | <Expresion Logica> | <Expresion Cadena> | <Caracter>
      */
     fun esExpresion(): Expresion? {
-        var token:Token=tokenActual
+        val token:Token=tokenActual
+        val posicion : Int = posicionActual
         var tipo: Expresion? = esExpresionAritmetica()
         if (tipo!= null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esExpresionRelacional()
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esExpresionLogica()
         if (tipo != null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo = esExpresionCadena()
         if (tipo!= null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo  = esExpresionCaracter()
         if (tipo != null) {
             return tipo
         }
+        tokenActual=token
+        posicionActual=posicion
         return null
     }
 
@@ -1082,21 +1112,26 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Valor Logico> ::= “wahr” | “saum” | <Expresion Relacional> | <Indentificador>
      */
      fun esValorLogico(): ValorLogico? {
-        var token:Token=tokenActual
+        val posicion : Int = posicionActual
+        val token: Token = tokenActual
         var valor: Valor? = esValorBooleano()
         if (valor!= null){
             return valor
         }
         tokenActual=token
+        posicionActual = posicion
         valor = esValorRelacional()
         if (valor!= null){
             return valor
         }
         tokenActual=token
+        posicionActual=posicion
         valor = esIdentificador()
         if (valor!= null){
             return valor
         }
+        tokenActual=token
+        posicionActual=posicion
         return null
     }
 
@@ -1156,26 +1191,32 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Comando Arreglo>  ::= <Declarar Arreglo> | <Inicializar Arreglo> | <Agregar Dato> | <Obtener Dato>
      */
     fun esComandoArreglo (): ComandoArreglo? {
-        var token : Token = tokenActual
+        val posicion : Int = posicionActual
+        val token: Token = tokenActual
         var tipo: ComandoArreglo? = esDeclaracionArreglo()
         if (tipo!= null){
             return tipo
         }
         tokenActual=token
+        posicionActual=posicion
         tipo= esInicializacionArreglo()
         if (tipo!= null){
             return tipo
         }
-        tokenActual = token
+        tokenActual=token
+        posicionActual=posicion
         tipo= esAgregacionDatoArreglo()
         if(tipo!= null){
             return tipo
         }
-        tokenActual = token
+        tokenActual=token
+        posicionActual=posicion
         tipo= esObtencionDatoArreglo()
         if(tipo!= null){
             return tipo
         }
+        tokenActual=token
+        posicionActual=posicion
         return tipo
     }
 

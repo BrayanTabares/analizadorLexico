@@ -36,6 +36,12 @@ class InicioController: Initializable{
                  if(uc!=null){
                      arbolVisual.root = uc.getArbolVisual()
                  }
+                 if(!sintaxis.listaErrores.isEmpty()){
+                     var alerta = Alert(Alert.AlertType.ERROR)
+                     alerta.contentText = sintaxis.listaErrores.toString()
+                     alerta.show()
+                 }
+
              } else {
                  var alerta = Alert(Alert.AlertType.ERROR)
                  alerta.contentText = "Hay errores lexicos en el código fuente"

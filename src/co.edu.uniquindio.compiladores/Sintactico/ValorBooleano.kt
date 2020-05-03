@@ -5,7 +5,7 @@ import javafx.scene.control.TreeItem
 
 class ValorBooleano(var valor: Token) : Valor(){
     override fun toString(): String {
-        return "ValorBooleano(valor=$valor)"
+        return "${valor.darLexema()}"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

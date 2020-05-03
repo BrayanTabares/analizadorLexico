@@ -15,7 +15,7 @@ class InvocacionFuncion(var identificador: Token, var listaArgumentos: ArrayList
 
         var raizA : TreeItem<String> = TreeItem("Argumentos")
         for (f in listaArgumentos){
-            raiz.children.add(f.getArbolVisual())
+            raizA.children.add(f.getArbolVisual())
         }
         raiz.children.add(raizA)
 

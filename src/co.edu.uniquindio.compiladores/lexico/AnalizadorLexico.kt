@@ -487,7 +487,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                     obtenerSiguienteCaracter()
 
                     almacenarToken(lexema,
-                        Categoria.OPERADOR_ASIGNACION,filaInicial,columnaInicial)
+                        Categoria.OPERADOR_RELACIONAL,filaInicial,columnaInicial)
                     return true
                 }
                 hacerBT(posicionInicial,filaInicial,columnaInicial)
@@ -503,7 +503,7 @@ class AnalizadorLexico(var codigoFuente:String) {
 
             }
             almacenarToken(lexema,
-                Categoria.OPERADOR_ASIGNACION,filaInicial,columnaInicial)
+                Categoria.OPERADOR_RELACIONAL,filaInicial,columnaInicial)
             return true
 
         }
@@ -833,7 +833,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                                     obtenerSiguienteCaracter()
 
                                     almacenarToken(lexema,
-                                            Categoria.OPERADOR_LOGICO,filaInicial,columnaInicial)
+                                            Categoria.CICLO_WHILE,filaInicial,columnaInicial)
                                     return true
                                 }
                                 hacerBT(posicionInicial,filaInicial,columnaInicial)
