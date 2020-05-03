@@ -235,6 +235,24 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         }
         tokenActual=token
         posicionActual=pos
+        tipo = esDeclaracionArreglo()
+        if (tipo!= null){
+            return tipo
+        }
+        tokenActual=token
+        posicionActual=pos
+        tipo= esInicializacionArreglo()
+        if (tipo!= null){
+            return tipo
+        }
+        tokenActual=token
+        posicionActual=pos
+        tipo= esAgregacionDatoArreglo()
+        if(tipo!= null){
+            return tipo
+        }
+        tokenActual=token
+        posicionActual=pos
         return null
     }
 
@@ -596,6 +614,12 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         }
         tokenActual=token
         posicionActual=posicion
+        tipo= esObtencionDatoArreglo()
+        if(tipo!= null){
+            return tipo
+        }
+        tokenActual=token
+        posicionActual=posicion
         return null
     }
 
@@ -951,7 +975,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Expresion Relacional> ::= "<"<Expresion Relacional>">" <Operador Relacional> <Expresion Relacional> | <Expresion Aritemetica> [<Operador Relacional> <Expresion Relacional>]
+     * <Expresion Relacional> ::= "<"<Expresion Relacional>">" [<Operador Relacional> <Expresion Relacional>] | <Expresion Aritemetica> <Operador Relacional> <Expresion Relacional>
      */
      fun esExpresionRelacional(): ExpresionRelacional? {
         if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
@@ -975,6 +999,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                    } else {
                        reportarError("Falta operador relacional")
                    }
+                    return ExpresionRelacional(expresion1,null,null)
                 } else {
                     reportarError("Falta cerrar la agrupación de expresión")
                 }
@@ -991,8 +1016,9 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 } else {
                     reportarError("Falta expresión a relacionar")
                 }
+            } else {
+                reportarError("Falta operador relacional")
             }
-            return ExpresionRelacional(expresion1, null, null)
         }
         return null
     }
@@ -1185,39 +1211,6 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             return TipoDato(valor)
         }
         return null
-    }
-
-    /**
-     * <Comando Arreglo>  ::= <Declarar Arreglo> | <Inicializar Arreglo> | <Agregar Dato> | <Obtener Dato>
-     */
-    fun esComandoArreglo (): ComandoArreglo? {
-        val posicion : Int = posicionActual
-        val token: Token = tokenActual
-        var tipo: ComandoArreglo? = esDeclaracionArreglo()
-        if (tipo!= null){
-            return tipo
-        }
-        tokenActual=token
-        posicionActual=posicion
-        tipo= esInicializacionArreglo()
-        if (tipo!= null){
-            return tipo
-        }
-        tokenActual=token
-        posicionActual=posicion
-        tipo= esAgregacionDatoArreglo()
-        if(tipo!= null){
-            return tipo
-        }
-        tokenActual=token
-        posicionActual=posicion
-        tipo= esObtencionDatoArreglo()
-        if(tipo!= null){
-            return tipo
-        }
-        tokenActual=token
-        posicionActual=posicion
-        return tipo
     }
 
     /**
