@@ -170,7 +170,6 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         while (f != null) {
             lista.add(f)
             f = esSentencia()
-            esBreak()
         }
         return lista
     }
@@ -342,6 +341,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         ) {
                             obtenerSiguienteToken()
                             val sentencias: ArrayList<Sentencia> = esListaSentencias()
+                            esBreak()
                             if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA && tokenActual.darLexema() == ")"
                             ) {
                                 obtenerSiguienteToken()
@@ -393,6 +393,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                                 ) {
                                     obtenerSiguienteToken()
                                     val sentencias: ArrayList<Sentencia> = esListaSentencias()
+                                    esBreak()
                                     if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA && tokenActual.darLexema() == ")"
                                     ) {
                                         obtenerSiguienteToken()
@@ -830,6 +831,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         ) {
                             obtenerSiguienteToken()
                             val sentencias: ArrayList<Sentencia> = esListaSentencias()
+                            esBreak()
                             if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA && tokenActual.darLexema() == ")"
                             ) {
                                 obtenerSiguienteToken()
@@ -842,6 +844,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                                     ) {
                                         obtenerSiguienteToken()
                                         sentenciasElse = esListaSentencias()
+                                        esBreak()
                                         if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA && tokenActual.darLexema() == ")"
                                         ) {
                                             obtenerSiguienteToken()

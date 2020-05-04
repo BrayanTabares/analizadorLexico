@@ -9,7 +9,9 @@ class Retorno(var expresion: Expresion?) : Sentencia() {
 
     override fun getArbolVisual(): TreeItem<String> {
         if(expresion!=null){
-            return TreeItem("Retornar: ${expresion?.getArbolVisual()}")
+            var raiz:TreeItem<String> = TreeItem ("Retornar")
+            raiz.children.add(expresion?.getArbolVisual())
+            return raiz
         }
         return TreeItem("Retorno Vacío")
     }
