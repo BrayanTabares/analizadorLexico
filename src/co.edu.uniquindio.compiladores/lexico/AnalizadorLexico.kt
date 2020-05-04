@@ -288,7 +288,7 @@ class AnalizadorLexico(var codigoFuente:String) {
     }
     //falta
     fun esString():Boolean{
-        if(caracterActual == '|'){
+        if(caracterActual == '*') {
             var lexema = ""
             var filaInicial = filaActual
             var columnaInicial = columnaActual
@@ -296,51 +296,40 @@ class AnalizadorLexico(var codigoFuente:String) {
 
             lexema += caracterActual
             obtenerSiguienteCaracter()
-            if(caracterActual == '|'){
-
+            while( caracterActual != '*' && caracterActual != finCodigo){
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
-
-                while( caracterActual != '|' && caracterActual != finCodigo){
+                if(caracterActual == '&'){
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-                    if(caracterActual == '&'){
+                    if(caracterActual == 'n' || caracterActual == 's' || caracterActual == 't' || caracterActual == 'l'){
                         lexema += caracterActual
                         obtenerSiguienteCaracter()
-                        if(caracterActual == 'n' || caracterActual == 's' || caracterActual == 't' || caracterActual == 'l'){
-                            lexema += caracterActual
-                            obtenerSiguienteCaracter()
-                        }
-                        else{
-                            hacerBT(posicionInicial,filaInicial,columnaInicial)
-                            return false
-                        }
+                    }else{
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        almacenarError("Caracter de escape no valido",filaActual,columnaActual)
+                        // por si no cierra el caracter
 
                     }
                 }
-                if(caracterActual == finCodigo){
-                    print("No cerro la cosa fin")
-                    hacerBT(posicionInicial,filaInicial,columnaInicial)
-                    return false
-                }
-
+            }
+            if(caracterActual == '*'){
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
-                if(caracterActual== '|'){
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
-                    almacenarToken(lexema,
-                        Categoria.CADENA,filaInicial,columnaInicial)
-                    return true
-                }
-                print("No cerro la cosa cosa")
-                hacerBT(posicionInicial,filaInicial,columnaInicial)
-                return false
-                //reporta error hace bt
-
+                almacenarToken(lexema,
+                    Categoria.CADENA,filaInicial,columnaInicial)
+                return true
             }
-            hacerBT(posicionInicial,filaInicial,columnaInicial)
-            return false
+            // si llega aca es porque nunca cerro la cadena
+            almacenarError("No cerro la cadena",filaActual,columnaActual)
+            // por si no cierra el caracter
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+            almacenarToken(lexema,
+                Categoria.CADENA,filaInicial,columnaInicial)
+            return true
+
         }
         return false
     }
