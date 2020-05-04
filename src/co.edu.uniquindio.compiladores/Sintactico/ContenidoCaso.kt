@@ -8,7 +8,7 @@ class ContenidoCaso( var listaSentencias: ArrayList<Sentencia>, var contenido: C
     }
 
     fun getArbolVisual(): TreeItem<String> {
-        var raiz : TreeItem<String> = TreeItem("Caso")
+        var raiz : TreeItem<String> = TreeItem("Contenido Caso")
 
         var raizS = TreeItem("Sentencias")
         for (f in listaSentencias){

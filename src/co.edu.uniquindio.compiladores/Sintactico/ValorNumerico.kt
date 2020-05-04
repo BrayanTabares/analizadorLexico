@@ -5,7 +5,7 @@ import javafx.scene.control.TreeItem
 
 class ValorNumerico(var signo: Token?, var  numero: Token) : ExpresionAritmetica(null,null,null) {
     override fun toString(): String {
-        return "ValorNumerico(signo=$signo, numero=$numero)"
+        return "${numero.darLexema()}"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

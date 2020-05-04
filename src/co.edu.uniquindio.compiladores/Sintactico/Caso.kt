@@ -9,8 +9,9 @@ class Caso(var expresion: Expresion, var contenido: ContenidoCaso?) {
 
     fun getArbolVisual(): TreeItem<String>? {
         var raiz : TreeItem<String> = TreeItem("Caso")
-
-        raiz.children.add(expresion.getArbolVisual())
+        var raizE : TreeItem<String> = TreeItem("Expresion de Caso")
+        raizE.children.add(expresion.getArbolVisual())
+        raiz.children.add(raizE)
 
         if(contenido!=null){
             raiz.children.add(contenido?.getArbolVisual())

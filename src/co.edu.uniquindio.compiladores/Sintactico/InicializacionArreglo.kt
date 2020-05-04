@@ -9,10 +9,10 @@ class InicializacionArreglo(var tipo: TipoDato?, var cantidad: ValorNumerico, va
     }
 
     override fun getArbolVisual (): TreeItem<String> {
-        var raiz = TreeItem("Declaracion de arreglo")
-        raiz.children.add(TreeItem("tipo de dato: $tipo"))
-        raiz.children.add(TreeItem("identificador: ${nombre.darLexema()}"))
-        raiz.children.add(TreeItem("cantidad: ${cantidad.getArbolVisual()}"))
+        var raiz = TreeItem("Inicialización de arreglo")
+        raiz.children.add(TreeItem("Tipo de dato: $tipo"))
+        raiz.children.add(TreeItem("Identificador: ${nombre.darLexema()}"))
+        raiz.children.add(TreeItem("Cantidad de datos: $cantidad"))
         return raiz
 
     }

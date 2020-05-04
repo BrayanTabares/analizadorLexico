@@ -8,10 +8,12 @@ class AgregacionDatoArreglo (var nombre: Token, var posicion: ValorNumerico, var
     }
 
     override fun getArbolVisual (): TreeItem<String> {
-        var raiz = TreeItem("Declaracion de arreglo")
-        raiz.children.add(TreeItem("posicion: ${posicion.getArbolVisual()}"))
-        raiz.children.add(TreeItem("identificador: ${nombre.darLexema()}"))
-        raiz.children.add(TreeItem("valor a agregar: ${valor.getArbolVisual()}"))
+        var raiz = TreeItem("Agregación de datos a arreglo")
+        raiz.children.add(TreeItem("Identificador: ${nombre.darLexema()}"))
+        raiz.children.add(TreeItem("Posición: $posicion"))
+        var raizv = TreeItem("Valor a Agregar")
+        raizv.children.add(valor.getArbolVisual())
+        raiz.children.add(raizv)
         return raiz
 
     }

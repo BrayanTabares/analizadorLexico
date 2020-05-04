@@ -60,6 +60,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             if(esOperadorAgrupacion()) continue
             if(esOperadorSeparacion()) continue
             if(esBloqueSentencia()) continue
+            if(esBloqueArreglo()) continue
             if(esOperadorIncremento()) continue
             if(esOperadorDecremento()) continue
             if(esPunto()) continue
@@ -704,7 +705,7 @@ class AnalizadorLexico(var codigoFuente:String) {
 
             lexema += caracterActual
             obtenerSiguienteCaracter()
-            if(caracterActual == 'a'){
+            if(caracterActual == 'i'){
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
                 if(caracterActual == 'l'){
@@ -1088,6 +1089,22 @@ class AnalizadorLexico(var codigoFuente:String) {
 
             almacenarToken(lexema,
                     Categoria.BLOQUE_SENTENCIA,filaInicial,columnaInicial)
+            return true
+        }
+        return false
+    }
+    fun esBloqueArreglo():Boolean{
+        if(caracterActual == '{' || caracterActual == '}'){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
+
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+
+            almacenarToken(lexema,
+                Categoria.BLOQUE_ARREGLO,filaInicial,columnaInicial)
             return true
         }
         return false
