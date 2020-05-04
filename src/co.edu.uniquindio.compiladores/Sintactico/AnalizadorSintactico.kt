@@ -175,7 +175,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Sentencia> ::= <Condición> | <Declaracion> | <Impresión> | <Asignación> | <Lectura> | <Invocacion Funcion> | <Iteración> | <Incremento> | <Inicializacion> | <Retorno>
+     * <Sentencia> ::= <Condición> | <Declaracion> | <Impresión> | <Asignación> | <Lectura> | <Invocacion Funcion> | <Iteración> | <Incremento> |
+     <Inicializacion> | <Retorno> | <Declaración Arreglo> | <Inicializar Arreglo> | <Agregar Arreglo>
      */
     fun esSentencia(): Sentencia? {
         var token: Token = tokenActual
@@ -592,7 +593,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Valor> ::= <Identificador> | <Expresion> | <Invocacion Funcion>
+     * <Valor> ::= <Identificador> | <Expresion> | <Invocacion Funcion> | <Lectura> | <Invocación>
      */
     fun esValor(): Valor? {
         val posicion : Int = posicionActual
@@ -877,7 +878,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Expresion> ::= <Expresion Aritmetica> | <Expresion Relacional> | <Expresion Logica> | <Expresion Cadena> | <Caracter>
+     * <Expresion> ::= <Expresion Aritmetica> | <Expresion Relacional> | <Expresion Logica> | <Expresion Cadena> | <Expresión Caracter> | <Identificador>
      */
     fun esExpresion(): Expresion? {
         val token:Token=tokenActual
@@ -1244,6 +1245,9 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         return null
     }
 
+    /**
+     *
+     */
     fun esValorBooleano(): ValorBooleano? {
         if (tokenActual.darTipo() == Categoria.BOOLEAN) {
             val valor: Token = tokenActual
@@ -1294,7 +1298,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Agregar Dato> ::= <Identificador> “[“ <Valor Numerico> “]” “~” <Valor> “!”
+     * <Agregar Dato> ::= <Identificador> “{“ <Valor Numerico> “}” “~” <Valor> “!”
      */
     private fun esAgregacionDatoArreglo(): AgregacionDatoArreglo?{
         if (tokenActual.darTipo() == Categoria.IDENTIFICADOR){
