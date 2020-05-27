@@ -187,13 +187,13 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         }
         tokenActual=token
         posicionActual=pos
-        tipo = esDeclaracion()
+        tipo = esInicializacion()
         if (tipo != null) {
             return tipo
         }
         tokenActual=token
         posicionActual=pos
-        tipo = esInicializacion()
+        tipo = esDeclaracion()
         if (tipo != null) {
             return tipo
         }

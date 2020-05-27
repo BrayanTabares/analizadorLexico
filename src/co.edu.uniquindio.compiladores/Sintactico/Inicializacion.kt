@@ -12,9 +12,11 @@ class Inicializacion (var tipoDato: TipoDato, var identificador: Token, var valo
         var raiz = TreeItem("Inicialización")
         raiz.children.add(TreeItem("Tipo de Dato: $tipoDato"))
         raiz.children.add(TreeItem("Identificador: ${identificador.darLexema()}"))
+        var valorR = TreeItem("Valor")
         if(valor!=null){
-            raiz.children.add(TreeItem("Valor: $valor"))
+            valorR.children.add(valor?.getArbolVisual())
         }
+        raiz.children.add(valorR)
         return raiz
     }
 }

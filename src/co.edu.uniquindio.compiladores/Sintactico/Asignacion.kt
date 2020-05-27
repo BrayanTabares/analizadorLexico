@@ -11,7 +11,11 @@ class Asignacion (var identificador : Token, var valor: Valor): Sentencia() {
     override fun getArbolVisual(): TreeItem<String> {
         var raiz = TreeItem("Asignación")
         raiz.children.add(TreeItem("identificador: ${identificador.darLexema()}"))
-        raiz.children.add(valor.getArbolVisual())
+        var valorR = TreeItem("Valor")
+        if(valor!=null){
+            valorR.children.add(valor.getArbolVisual())
+        }
+        raiz.children.add(valorR)
         return raiz
     }
 
