@@ -52,6 +52,8 @@ class Funcion (var nombre : Token, var parametros : ArrayList<Parametro>, var ti
     }
 
     fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>) {
-
+        for(s in sentencias){
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, nombre.darLexema())
+        }
     }
 }
