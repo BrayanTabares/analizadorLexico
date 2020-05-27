@@ -21,4 +21,8 @@ class Asignacion (var identificador : Token, var valor: Valor): Sentencia() {
         return raiz
     }
 
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        super.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+    }
+
 }

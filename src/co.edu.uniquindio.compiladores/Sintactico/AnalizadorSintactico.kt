@@ -426,7 +426,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Invocacion Funcion> ::= <Indentificador> “<” [<Lista Argumentos>] “>”
+     * <Invocacion Funcion> ::= <Indentificador> “<” [<Lista Argumentos>] “>” "!"
      */
     fun esInvocacionFuncion(): InvocacionFuncion? {
         if (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
@@ -441,7 +441,12 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                     tokenActual.darLexema() == ">"
                 ) {
                     obtenerSiguienteToken()
-                    return InvocacionFuncion(invocacion, listaArgumentos)
+                    if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
+                        obtenerSiguienteToken()
+                        return InvocacionFuncion(invocacion, listaArgumentos)
+                    } else {
+                        reportarError("Falta operador terminal de Invocaciòn")
+                    }
                 } else {
                     reportarError("Falta cierre de invocación" + tokenActual.darLexema())
                 }
@@ -454,9 +459,23 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <Invocacion> ::= <Indentificador> “<” [<Lista Argumentos>] “>”
      */
     fun esValorInvocacion(): ValorInvocacion? {
-        val invocacion: InvocacionFuncion? = esInvocacionFuncion()
-        if (invocacion != null) {
-            return ValorInvocacion(invocacion)
+        if (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
+            val invocacion: Token = tokenActual
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                tokenActual.darLexema() == "<"
+            ) {
+                obtenerSiguienteToken()
+                val listaArgumentos: ArrayList<Valor> = esListaArgumentos()
+                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
+                    tokenActual.darLexema() == ">"
+                ) {
+                    obtenerSiguienteToken()
+                    return ValorInvocacion(InvocacionFuncion(invocacion, listaArgumentos))
+                } else {
+                    reportarError("Falta cierre de invocación" + tokenActual.darLexema())
+                }
+            }
         }
         return null
     }
@@ -1134,30 +1153,30 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         obtenerSiguienteToken()
                         val expresion2: ExpresionAritmetica? = esExpresionAritmetica()
                         if (expresion2 != null) {
-                            return ExpresionAritmetica(expresion1, operador, expresion2)
+                            return ExpresionAritmetica(expresion1, operador, expresion2,null)
                         } else {
                             reportarError("Falta expresión a relacionar")
                         }
                     }
-                    return ExpresionAritmetica(expresion1, null, null)
+                    return ExpresionAritmetica(expresion1, null, null, null)
                 } else {
                     reportarError("Falta cerrar la agrupación de expresión")
                 }
             }
         }
-        val expresion1: ValorNumerico? = esValorNumerico()
-        if (expresion1 != null) {
+        val valor: ValorNumerico? = esValorNumerico()
+        if (valor != null) {
             if (tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO) {
                 val operador: Token = tokenActual
                 obtenerSiguienteToken()
                 val expresion2: ExpresionAritmetica? = esExpresionAritmetica()
                 if (expresion2 != null) {
-                    return ExpresionAritmetica(expresion1, operador, expresion2)
+                    return ExpresionAritmetica(null, operador, expresion2, valor)
                 } else {
                     reportarError("Falta expresión a relacionar")
                 }
             }
-            return ExpresionAritmetica(expresion1, null, null)
+            return ExpresionAritmetica(null, null, null, valor)
         }
         return null
     }
@@ -1253,30 +1272,51 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Valor Numerico> ::= [<Signo>] <Real> | [<Signo] <Entero> | <Identificador>
+     * <Valor Numerico> ::= [<Signo>] <Real> | [<Signo] <Entero> | <Identificador> | <Valor Invocacion>
      */
     fun esValorNumerico(): ValorNumerico? {
-        if (tokenActual.darTipo() == Categoria.IDENTIFICADOR) {
-            val numero: Token = tokenActual
-            obtenerSiguienteToken()
-            return ValorNumerico(null, numero)
-        }
+        val posicion: Int = posicionActual
+        val token: Token = tokenActual
+        var posicion1: Int = posicionActual
+        var token1: Token = tokenActual
         var signo: Token? = null
         if (tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO &&
             (tokenActual.darLexema() == "$" || tokenActual.darLexema() == "¬")
         ) {
             signo = tokenActual
             obtenerSiguienteToken()
+            posicion1=posicionActual
+            token1=tokenActual
         }
+        var tipo: Valor? = esObtencionDatoArreglo()
+        if (tipo != null) {
+            return ValorNumerico(signo,null,tipo)
+        }
+        tokenActual = token1
+        posicionActual = posicion1
+        tipo = esValorInvocacion()
+        if (tipo != null) {
+            return ValorNumerico(signo,null,tipo)
+        }
+        tokenActual = token1
+        posicionActual = posicion1
+        tipo = esIdentificador()
+        if (tipo != null) {
+            return ValorNumerico(signo,null,tipo)
+        }
+        tokenActual = token1
+        posicionActual = posicion1
         if (tokenActual.darTipo() == Categoria.DECIMAL) {
             val numero: Token = tokenActual
             obtenerSiguienteToken()
-            return ValorNumerico(signo, numero)
+            return ValorNumerico(signo, numero,null)
         } else if (tokenActual.darTipo() == Categoria.ENTERO) {
             val numero: Token = tokenActual
             obtenerSiguienteToken()
-            return ValorNumerico(signo, numero)
+            return ValorNumerico(signo, numero,null)
         }
+        tokenActual = token
+        posicionActual = posicion
         return null
     }
 

@@ -11,4 +11,6 @@ open class Valor : ValorLogico() {
     override fun toString(): String {
         return "Valor()"
     }
+
+
 }

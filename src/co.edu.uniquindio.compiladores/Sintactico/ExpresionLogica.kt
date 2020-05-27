@@ -1,5 +1,7 @@
 package co.edu.uniquindio.compiladores.Sintactico
+import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token?, var  expresion2: ExpresionLogica?) : Expresion(){
@@ -29,5 +31,9 @@ open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token
         }
 
         return raiz
+    }
+
+    override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
+        return "dich"
     }
 }

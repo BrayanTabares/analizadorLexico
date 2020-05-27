@@ -1,6 +1,8 @@
 package co.edu.uniquindio.compiladores.Sintactico
 
+import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class ExpresionRelacional(var expresion1: Expresion, var operador: Token?, var expresion2: Expresion?) : Expresion(){
@@ -30,5 +32,9 @@ class ExpresionRelacional(var expresion1: Expresion, var operador: Token?, var e
         }
 
         return raiz
+    }
+
+    override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
+        return "dich"
     }
 }

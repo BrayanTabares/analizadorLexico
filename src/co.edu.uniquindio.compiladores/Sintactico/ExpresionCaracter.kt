@@ -1,6 +1,8 @@
 package co.edu.uniquindio.compiladores.Sintactico
 
+import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class ExpresionCaracter(var caracter: Token) :Expresion(){
@@ -14,5 +16,9 @@ class ExpresionCaracter(var caracter: Token) :Expresion(){
         raiz.children.add(TreeItem("Carácter: ${caracter.darLexema()}"))
 
         return raiz
+    }
+
+    override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
+        return "zeichen"
     }
 }
