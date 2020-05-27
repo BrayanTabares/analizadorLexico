@@ -1,5 +1,7 @@
 package co.edu.uniquindio.compiladores.Sintactico
 
+import co.edu.uniquindio.compiladores.lexico.Error
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class ContenidoCaso( var listaSentencias: ArrayList<Sentencia>, var contenido: ContenidoCaso?, var caso: Caso? ) {
@@ -26,4 +28,12 @@ class ContenidoCaso( var listaSentencias: ArrayList<Sentencia>, var contenido: C
 
         return raiz
     }
+
+    fun llenarTablaSimbolos(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        for(s in listaSentencias){
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+        }
+    }
+
+
 }

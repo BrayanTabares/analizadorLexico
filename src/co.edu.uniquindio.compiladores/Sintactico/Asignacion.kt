@@ -1,6 +1,8 @@
 package co.edu.uniquindio.compiladores.Sintactico
 
+import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class Asignacion (var identificador : Token, var valor: Valor): Sentencia() {

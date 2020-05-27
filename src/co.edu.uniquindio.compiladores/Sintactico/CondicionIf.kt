@@ -1,5 +1,7 @@
 package co.edu.uniquindio.compiladores.Sintactico
 
+import co.edu.uniquindio.compiladores.lexico.Error
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class CondicionIf(var expresion: ExpresionLogica, var sentencias: ArrayList<Sentencia>, var sentenciasElse: ArrayList<Sentencia>): Condicion() {
@@ -25,6 +27,19 @@ class CondicionIf(var expresion: ExpresionLogica, var sentencias: ArrayList<Sent
         raiz.children.add(raizE)
 
         return raiz
+    }
+
+    override fun llenarTablaSimbolos(
+        tablaSimbolos: TablaSimbolos,
+        erroresSemanticos: ArrayList<Error>,
+        ambito: String
+    ) {
+        for(s in sentencias){
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+        }
+        for(s in sentenciasElse){
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+        }
     }
 
 }

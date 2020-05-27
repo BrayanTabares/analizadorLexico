@@ -1,6 +1,8 @@
 package co.edu.uniquindio.compiladores.Sintactico
 
+import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class InicializacionArreglo(var tipo: TipoDato?, var cantidad: ValorNumerico, var nombre: Token): ComandoArreglo(){
@@ -15,5 +17,13 @@ class InicializacionArreglo(var tipo: TipoDato?, var cantidad: ValorNumerico, va
         raiz.children.add(TreeItem("Cantidad de datos: $cantidad"))
         return raiz
 
+    }
+
+    override fun llenarTablaSimbolos(
+        tablaSimbolos: TablaSimbolos,
+        erroresSemanticos: ArrayList<Error>,
+        ambito: String
+    ) {
+        tablaSimbolos.guardarSimboloVariable(nombre.darLexema(),tipo.toString(),ambito,nombre.fila,nombre.columna)
     }
 }

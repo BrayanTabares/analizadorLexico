@@ -166,6 +166,30 @@
                                     </GridPane>
                                  </content>
                               </Tab>
+                              <Tab text="Errores Semánticos">
+                                 <content>
+                                    <GridPane>
+                                       <children>
+                                          <TableView fx:id="tablaErroresS1" prefHeight="200.0" prefWidth="496.0">
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                             <columns>
+                                                <TableColumn fx:id="colErrorS1" prefWidth="370.0" text="Mensaje Error" />
+                                                <TableColumn fx:id="colFilaS1" prefWidth="62.0" text="Fila" />
+                                                <TableColumn fx:id="colColumnaS1" minWidth="9.0" prefWidth="63.0" text="Columna" />
+                                             </columns>
+                                          </TableView>
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </content>
+                              </Tab>
                           </tabs>
                            <GridPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

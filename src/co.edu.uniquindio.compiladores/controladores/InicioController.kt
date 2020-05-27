@@ -4,6 +4,7 @@ import co.edu.uniquindio.compiladores.Sintactico.AnalizadorSintactico
 import co.edu.uniquindio.compiladores.lexico.AnalizadorLexico
 import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.AnalizadorSemantico
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
@@ -36,6 +37,11 @@ class InicioController: Initializable{
     @FXML lateinit var colFilaS:TableColumn<Error,Int>
     @FXML lateinit var colColumnaS:TableColumn<Error,Int>
 
+    @FXML lateinit var tablaErroresS1:TableView<Error>
+    @FXML lateinit var colErrorS1:TableColumn<Error,String>
+    @FXML lateinit var colFilaS1:TableColumn<Error,Int>
+    @FXML lateinit var colColumnaS1:TableColumn<Error,Int>
+
     @FXML lateinit var imageI: ImageView
     @FXML lateinit var imageD: ImageView
     @FXML lateinit var imageI2: ImageView
@@ -50,6 +56,7 @@ class InicioController: Initializable{
         tablaTokens.items = null
         tablaErroresL.items = null
         tablaErroresS.items = null
+        tablaErroresS1.items = null
         arbolVisual.root = null
          if(codigoFuente.text.length > 0){
              val lexico = AnalizadorLexico(codigoFuente.text)
@@ -61,6 +68,15 @@ class InicioController: Initializable{
                  val uc = sintaxis.esUnidadDeCompilacion()
                  if(uc!=null){
                      arbolVisual.root = uc.getArbolVisual()
+                     val semantico=AnalizadorSemantico(uc)
+                     semantico.llenarTablaSimbolos()
+                     println(semantico.tablaSimbolos)
+                     if(!semantico.erroresSemanticos.isEmpty()){
+                         tablaErroresS1.items = FXCollections.observableArrayList(semantico.erroresSemanticos)
+                         var alerta = Alert(Alert.AlertType.ERROR)
+                         alerta.contentText = "Hay errores semánticos en el código fuente"
+                         alerta.show()
+                     }
                  }
                  if(!sintaxis.listaErrores.isEmpty()){
                      tablaErroresS.items = FXCollections.observableArrayList(sintaxis.listaErrores)
@@ -93,6 +109,10 @@ class InicioController: Initializable{
         colErrorS.cellValueFactory = PropertyValueFactory("error")
         colFilaS.cellValueFactory = PropertyValueFactory("fila")
         colColumnaS.cellValueFactory = PropertyValueFactory("columna")
+
+        colErrorS1.cellValueFactory = PropertyValueFactory("error")
+        colFilaS1.cellValueFactory = PropertyValueFactory("fila")
+        colColumnaS1.cellValueFactory = PropertyValueFactory("columna")
 
         val i = Image(File("resources/barraI.gif").toURI().toString())
         imageI.setImage(i)

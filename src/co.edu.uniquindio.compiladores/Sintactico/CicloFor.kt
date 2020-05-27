@@ -1,5 +1,7 @@
 package co.edu.uniquindio.compiladores.Sintactico
 
+import co.edu.uniquindio.compiladores.lexico.Error
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class CicloFor(var inicializacion: Inicializacion?,var expresionRelacional: ExpresionRelacional, var incremento: Incremento, var sentencias: ArrayList<Sentencia>) : Iterador(){
@@ -24,5 +26,16 @@ class CicloFor(var inicializacion: Inicializacion?,var expresionRelacional: Expr
         raiz.children.add(raizS)
 
         return raiz
+    }
+
+    override fun llenarTablaSimbolos(
+        tablaSimbolos: TablaSimbolos,
+        erroresSemanticos: ArrayList<Error>,
+        ambito: String
+    ) {
+        inicializacion?.llenarTablaSimbolos(tablaSimbolos,erroresSemanticos,ambito)
+        for(s in sentencias){
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+        }
     }
 }
