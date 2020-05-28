@@ -27,4 +27,10 @@ class Caso(var expresion: Expresion, var contenido: ContenidoCaso?) {
         contenido?.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
 
     }
+
+    open fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        contenido?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+
+    }
 }

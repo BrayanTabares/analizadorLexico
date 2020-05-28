@@ -1,5 +1,7 @@
 package co.edu.uniquindio.compiladores.Sintactico
 
+import co.edu.uniquindio.compiladores.lexico.Error
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class Lectura (var expresion : Expresion?) : Sentencia() {
@@ -13,5 +15,13 @@ class Lectura (var expresion : Expresion?) : Sentencia() {
             raiz.children.add(expresion?.getArbolVisual())
         }
         return raiz
+    }
+
+    override fun obtenerTipo(
+        tablaSimbolos: TablaSimbolos,
+        erroresSemanticos: ArrayList<Error>,
+        ambito: String
+    ): String {
+        return "fessel"
     }
 }

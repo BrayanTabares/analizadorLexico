@@ -22,7 +22,7 @@ class DeclaracionArreglo(var tipoDato: TipoDato?, var nombre: Token):ComandoArre
         erroresSemanticos: ArrayList<Error>,
         ambito: String
     ) {
-        tablaSimbolos.guardarSimboloVariable(nombre.darLexema(),tipoDato.toString(),ambito,nombre.fila,nombre.columna)
+        tablaSimbolos.guardarSimboloVariable(nombre.darLexema(),"rolle("+tipoDato.toString()+")",ambito,nombre.fila,nombre.columna)
     }
 
 }

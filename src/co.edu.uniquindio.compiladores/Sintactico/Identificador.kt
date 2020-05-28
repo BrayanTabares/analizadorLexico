@@ -24,4 +24,8 @@ class Identificador (var identificador: Token) : Valor() {
             return ""
         }
     }
+
+    override fun getToken(): Token {
+        return identificador
+    }
 }

@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class ObtencionDatoArreglo (var nombre: Token, var posicion: ValorNumerico ):Valor(){
     override fun toString(): String {
-        return "Obtencion de un dato del arreglo ( nombre= $nombre, posicion= $posicion"
+        return "${nombre.darLexema()}"
     }
 
     override fun getArbolVisual (): TreeItem<String> {
@@ -24,11 +24,23 @@ class ObtencionDatoArreglo (var nombre: Token, var posicion: ValorNumerico ):Val
     ): String {
         val tipo : String? = tablaSimbolos.buscarSimboloVariable(nombre.darLexema(),ambito)?.tipo
         if(tipo!=null) {
-            return tipo
+            if(tipo.contains("rolle")){
+                return tipo.substring(6,tipo.length-1)
+            }else{
+                erroresSemanticos.add(Error("El identificador ${nombre.darLexema()} no corresponde a un arreglo",nombre.fila,nombre.columna))
+            }
         }else{
             erroresSemanticos.add(Error("El arreglo ${nombre.darLexema()} no existe",nombre.fila,nombre.columna))
-            return ""
         }
+        return ""+tipo
+    }
+
+    override fun getToken(): Token {
+        return nombre
+    }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        posicion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
     }
 
 }

@@ -32,4 +32,12 @@ class CicloWhile( var expresionL: ExpresionLogica, var sentencias: ArrayList<Sen
             s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
         }
     }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        expresionL.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        for(s in sentencias){
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+
+    }
 }

@@ -3,6 +3,7 @@ package co.edu.uniquindio.compiladores.Sintactico
 import co.edu.uniquindio.compiladores.lexico.Categoria
 import co.edu.uniquindio.compiladores.lexico.Token
 import co.edu.uniquindio.compiladores.lexico.Error
+import org.omg.PortableInterceptor.ObjectReferenceTemplate
 
 class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     var posicionActual = 0
@@ -94,10 +95,10 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                                 obtenerSiguienteToken()
                                 return Funcion(nombre, parametros, tipoDato, sentencias)
                             } else {
-                                reportarError("Falta cerrar bloque de sentencia función")
+                                reportarError("Falta cerrar bloque de sentencia función ")
                             }
                         } else {
-                            reportarError("Falta abrir bloque de sentencia función")
+                            reportarError("Falta abrir bloque de sentencia función"+tokenActual)
                         }
                     } else {
                         reportarError("Falta cierre de parametros de función")
@@ -284,14 +285,14 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Retorno> ::= “ertrag” [<Expresion>] “!”
+     * <Retorno> ::= “ertrag” [<Valor>] “!”
      */
     fun esRetorno(): Retorno? {
         if (tokenActual.darTipo() == Categoria.RETORNO &&
             tokenActual.darLexema() == "ertrag"
         ) {
             obtenerSiguienteToken()
-            val expresion: Expresion? = esExpresion()
+            val expresion: Valor? = esValor()
             if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
                 obtenerSiguienteToken()
                 return Retorno(expresion)
@@ -635,12 +636,18 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Valor> ::= <Identificador> | <Expresion> | <Invocacion Funcion> | <Lectura> | <Invocación>
+     * <Valor> ::= <Identificador> | <Expresion> | <Invocacion Funcion> | <Lectura> | <Invocación> | <Arreglo>
      */
     fun esValor(): Valor? {
         val posicion: Int = posicionActual
         val token: Token = tokenActual
         var tipo: Valor? = esObtencionDatoArreglo()
+        if (tipo != null) {
+            return tipo
+        }
+        tokenActual = token
+        posicionActual = posicion
+        tipo = esObtencionArreglo()
         if (tipo != null) {
             return tipo
         }
@@ -1054,6 +1061,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         } else {
                             reportarError("Falta expresión a relacionar")
                         }
+                    } else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
+                        return null
                     }
                     return ExpresionRelacional(expresion1, null, null)
                 } else {
@@ -1072,8 +1081,12 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 } else {
                     reportarError("Falta expresión a relacionar")
                 }
-            } else {
-                reportarError("Falta operador relacional")
+            }else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
+                return null
+            } else if(tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION){
+                return ExpresionRelacional(expresion1, null, null)
+            }else{
+                reportarError("Falta operador relacional"+tokenActual.darLexema())
             }
         }
         return null
@@ -1102,6 +1115,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         } else {
                             reportarError("Falta expresión a relacionar")
                         }
+                    } else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
+                        return null
                     }
                     return ExpresionRelacional(expresion1, null, null)
                 } else {
@@ -1117,6 +1132,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 val expresion2: Expresion? = esExpresionRelacional2()
                 if (expresion2 != null) {
                     return ExpresionRelacional(expresion1, operador, expresion2)
+                } else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
+                    return null
                 } else {
                     reportarError("Falta expresión a relacionar")
                 }
@@ -1157,6 +1174,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         } else {
                             reportarError("Falta expresión a relacionar")
                         }
+                    } else if(tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL || tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
+                        return null
                     }
                     return ExpresionAritmetica(expresion1, null, null, null)
                 } else {
@@ -1345,7 +1364,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     *
+     *<Tipo Dato> ::=  <Dato> | "rolle" "{" <Tipo Dato> "}"
      */
     fun esTipoDato(): TipoDato? {
         if (tokenActual.darTipo() == Categoria.DATO_ENTERO ||
@@ -1356,8 +1375,28 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         ) {
             val valor: Token = tokenActual
             obtenerSiguienteToken()
-            return TipoDato(valor)
+            return TipoDato(valor,null)
         }
+        if(tokenActual.darTipo() == Categoria.ARREGLO){
+            obtenerSiguienteToken()
+            if (tokenActual.darTipo() == Categoria.BLOQUE_ARREGLO &&
+                tokenActual.darLexema() == "{"
+            ) {
+                obtenerSiguienteToken()
+                var tipo: TipoDato? = esTipoDato()
+                if(tipo!=null){
+                    if (tokenActual.darTipo() == Categoria.BLOQUE_ARREGLO &&
+                        tokenActual.darLexema() == "}"
+                    ) {
+                        obtenerSiguienteToken()
+                        return TipoDato(null, tipo)
+                    } else{
+                        reportarError("No se cerró el tipo de dato array")
+                    }
+                }
+            }
+        }
+
         return null
     }
 
@@ -1427,8 +1466,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      *<Inicializar Arreglo>::=  <tipo de dato> “{“”}”  <Identificador> “~” <Tipo Dato>  “{“ <Valor Numerico> “}” “!”
      */
     private fun esInicializacionArreglo(): InicializacionArreglo? {
-        val tipoDato: TipoDato? = esTipoDato()
-        if (tipoDato != null) {
+        val tipoDato1: TipoDato? = esTipoDato()
+        if (tipoDato1 != null) {
             if (tokenActual.darTipo() == Categoria.BLOQUE_ARREGLO &&
                 tokenActual.darLexema() == "{"
             ) {
@@ -1442,8 +1481,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         obtenerSiguienteToken()
                         if (tokenActual.darTipo() == Categoria.OPERADOR_ASIGNACION) {
                             obtenerSiguienteToken()
-                            val tipoDato: TipoDato? = esTipoDato()
-                            if (tipoDato != null) {
+                            val tipoDato2: TipoDato? = esTipoDato()
+                            if (tipoDato2 != null) {
                                 if (tokenActual.darTipo() == Categoria.BLOQUE_ARREGLO &&
                                     tokenActual.darLexema() == "{"
                                 ) {
@@ -1456,7 +1495,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                                             obtenerSiguienteToken()
                                             if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
                                                 obtenerSiguienteToken()
-                                                return InicializacionArreglo(tipoDato, cantidad, nombre)
+                                                return InicializacionArreglo(tipoDato1, nombre,cantidad, tipoDato2)
                                             }
                                         }
                                     }
@@ -1470,6 +1509,30 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         return null
     }
 
+
+    /**
+     *<Obtencion Arreglo>::=   <Tipo Dato>  “{“ <Valor Numerico> “}”
+     */
+    private fun esObtencionArreglo(): ObtencionArreglo? {
+        val tipoDato: TipoDato? = esTipoDato()
+        if (tipoDato != null) {
+            if (tokenActual.darTipo() == Categoria.BLOQUE_ARREGLO &&
+                tokenActual.darLexema() == "{"
+            ) {
+                obtenerSiguienteToken()
+                var cantidad: ValorNumerico? = esValorNumerico()
+                if (cantidad != null) {
+                    if (tokenActual.darTipo() == Categoria.BLOQUE_ARREGLO &&
+                        tokenActual.darLexema() == "}"
+                    ) {
+                        obtenerSiguienteToken()
+                        return ObtencionArreglo(tipoDato,cantidad)
+                    }
+                }
+            }
+        }
+        return null
+    }
     /**
      * <Declarar Arreglo> ::=  <tipo de dato> “{“”}” <identificador> "!"
      */

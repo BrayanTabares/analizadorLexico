@@ -39,6 +39,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             if(esString()) continue
             if(esDatoBoolean()) continue
             if(esBoolean()) continue
+            if(esArray()) continue
             if(esOperadorAritmetico()) continue
             if(esOperadorAsignacion()) continue
             if(esOperadorRelacional()) continue
@@ -129,6 +130,46 @@ class AnalizadorLexico(var codigoFuente:String) {
                         almacenarToken(lexema,
                                 Categoria.DATO_REAL,filaInicial,columnaInicial)
                         return true
+                    }
+                    hacerBT(posicionInicial,filaInicial,columnaInicial)
+                    return false
+                }
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+            }
+            hacerBT(posicionInicial,filaInicial,columnaInicial)
+            return false
+        }
+        return false
+    }
+    fun esArray():Boolean{
+        if (caracterActual == 'r'){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+            if (caracterActual == 'o'){
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                if (caracterActual == 'l'){
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    if (caracterActual == 'l') {
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        if (caracterActual == 'e') {
+                            lexema += caracterActual
+                            obtenerSiguienteCaracter()
+                            almacenarToken(
+                                lexema,
+                                Categoria.ARREGLO, filaInicial, columnaInicial
+                            )
+                            return true
+                        }
+                        hacerBT(posicionInicial, filaInicial, columnaInicial)
+                        return false
                     }
                     hacerBT(posicionInicial,filaInicial,columnaInicial)
                     return false

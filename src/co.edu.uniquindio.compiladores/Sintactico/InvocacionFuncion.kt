@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class InvocacionFuncion(var identificador: Token, var listaArgumentos: ArrayList<Valor>) : Sentencia() {
     override fun toString(): String {
-        return "InvocacionFuncion(identificador=$identificador, listaArgumentos=$listaArgumentos)"
+        return "$identificador"
     }
 
     override fun getArbolVisual(): TreeItem<String> {
@@ -24,12 +24,16 @@ class InvocacionFuncion(var identificador: Token, var listaArgumentos: ArrayList
         return raiz
     }
 
-    fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
-        val tipo : String? = tablaSimbolos.buscarSimboloVariable(identificador.darLexema(),ambito)?.tipo
+    override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
+        var argumentos:ArrayList<String> = ArrayList()
+        for(v in listaArgumentos){
+            argumentos.add(v.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito))
+        }
+        val tipo : String? = tablaSimbolos.buscarSimboloFuncion(identificador.darLexema(),argumentos)?.tipo
         if(tipo!=null) {
             return tipo
         }else{
-            erroresSemanticos.add(Error("El metodo ${identificador.darLexema()} no existe",identificador.fila,identificador.columna))
+            erroresSemanticos.add(Error("El metodo ${identificador.darLexema()} no existe o posee distintos argumentos",identificador.fila,identificador.columna))
             return ""
         }
     }

@@ -43,4 +43,19 @@ open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token
     override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
         return "dich"
     }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if(expresion1!=null){
+            expresion1!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+        if(expresion2!=null){
+            expresion2!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+        if(valor!=null){
+            valor!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+            if(valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)!="dich"){
+                erroresSemanticos.add(Error("El identificador ${valor!!.getToken().darLexema()} no corresponde a un valor lógico",valor!!.getToken().fila,valor!!.getToken().columna))
+            }
+        }
+    }
 }

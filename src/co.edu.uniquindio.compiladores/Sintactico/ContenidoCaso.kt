@@ -35,5 +35,11 @@ class ContenidoCaso( var listaSentencias: ArrayList<Sentencia>, var contenido: C
         }
     }
 
-
+    fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        contenido?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        caso?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        for(s in listaSentencias){
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+    }
 }

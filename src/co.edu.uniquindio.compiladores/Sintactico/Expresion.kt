@@ -9,7 +9,7 @@ open class Expresion : Sentencia() {
         return TreeItem("Expresión Vacía")
     }
 
-    open fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String):String{
+    override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String):String{
         return ""
     }
 }

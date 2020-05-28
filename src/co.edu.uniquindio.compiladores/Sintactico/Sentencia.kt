@@ -16,4 +16,8 @@ open class Sentencia {
     open fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
 
     }
+
+    open fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
+        return ""
+    }
 }

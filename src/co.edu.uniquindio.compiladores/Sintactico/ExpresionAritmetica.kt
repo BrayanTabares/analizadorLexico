@@ -56,7 +56,7 @@ open class ExpresionAritmetica(var expresion1: ExpresionAritmetica?, var operado
                 "echt"
             }
         }else if(valorNumerico!=null && expresion2 !=null){
-            val ex1 : String =expresion1!!.obtenerTipo(tablaSimbolos,erroresSemanticos,ambito)
+            val ex1 : String =valorNumerico!!.obtenerTipo(tablaSimbolos,erroresSemanticos,ambito)
             val ex2 : String =expresion2!!.obtenerTipo(tablaSimbolos,erroresSemanticos,ambito)
             return if(ex1 == ex2){
                 ex1
@@ -65,5 +65,17 @@ open class ExpresionAritmetica(var expresion1: ExpresionAritmetica?, var operado
             }
         }
         return ""
+    }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if(expresion1!=null){
+            expresion1!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+        if(expresion2!=null){
+            expresion2!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+        if(valorNumerico!=null){
+            valorNumerico!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
     }
 }

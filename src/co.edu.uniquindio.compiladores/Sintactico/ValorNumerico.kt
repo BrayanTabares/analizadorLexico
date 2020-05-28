@@ -39,34 +39,19 @@ class ValorNumerico(var signo: Token?, var  numero: Token?, var valor:Valor?) : 
             return "ganz"
         }else if (numero?.darTipo() == Categoria.DECIMAL){
             return "echt"
-        }else if(valor is Identificador){
-            val identificador: Identificador = valor as Identificador
-            val tipo:String=identificador.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
-            if(tipo=="ganz" || tipo == "echt"){
-                return tipo
-            }else{
-                erroresSemanticos.add(Error("El identificador ${identificador.identificador.darLexema()} no corresponde a un valor numérico",identificador.identificador.fila,identificador.identificador.columna))
-                return ""
-            }
-        }else if(valor is ValorInvocacion){
-            val identificador: ValorInvocacion = valor as ValorInvocacion
-            val tipo:String=identificador.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
-            if(tipo=="ganz" || tipo == "echt"){
-                return tipo
-            }else{
-                erroresSemanticos.add(Error("El metodo ${identificador.invocacion.identificador.darLexema()} no corresponde a un valor numérico",identificador.invocacion.identificador.fila,identificador.invocacion.identificador.columna))
-                return ""
-            }
-        }else if(valor is ObtencionDatoArreglo){
-            val identificador: ObtencionDatoArreglo = valor as ObtencionDatoArreglo
-            val tipo:String=identificador.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
-            if(tipo=="ganz" || tipo == "echt"){
-                return tipo
-            }else{
-                erroresSemanticos.add(Error("El metodo ${identificador.nombre.darLexema()} no corresponde a un valor numérico",identificador.nombre.fila,identificador.nombre.columna))
-                return ""
-            }
+        }else if(valor!=null){
+            return valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
         }
         return ""
+    }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if(valor!=null){
+            valor!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+            val tipo:String?=valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
+            if(tipo!="ganz" || tipo != "echt"){
+                erroresSemanticos.add(Error("El identificador ${valor.toString()} no corresponde a un valor numérico",valor!!.getToken().fila,valor!!.getToken().columna))
+            }
+        }
     }
 }

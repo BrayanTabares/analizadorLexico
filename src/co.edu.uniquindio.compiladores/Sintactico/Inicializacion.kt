@@ -31,8 +31,8 @@ class Inicializacion (var tipoDato: TipoDato, var identificador: Token, var valo
     }
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
-        if(tipoDato.valor.darLexema() != valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)){
-            erroresSemanticos.add(Error("El tipo de dato del valor no coincide con el de la inicialización",identificador.fila,identificador.columna))
+        if(tipoDato?.toString() != valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)){
+            erroresSemanticos.add(Error("El tipo de dato de la inicialización (${tipoDato?.toString()}) no coincide con el del valor (${valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)})",identificador.fila,identificador.columna))
         }
     }
 }

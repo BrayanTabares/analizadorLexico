@@ -42,4 +42,14 @@ class CondicionIf(var expresion: ExpresionLogica, var sentencias: ArrayList<Sent
         }
     }
 
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        for(s in sentencias){
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+        for(s in sentenciasElse){
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+    }
+
 }
