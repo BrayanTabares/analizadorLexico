@@ -71,6 +71,7 @@ class InicioController: Initializable{
                      val semantico=AnalizadorSemantico(uc)
                      semantico.llenarTablaSimbolos()
                      println(semantico.tablaSimbolos)
+                     semantico.analizarSemantica()
                      if(!semantico.erroresSemanticos.isEmpty()){
                          tablaErroresS1.items = FXCollections.observableArrayList(semantico.erroresSemanticos)
                          var alerta = Alert(Alert.AlertType.ERROR)

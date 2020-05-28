@@ -29,4 +29,10 @@ class Inicializacion (var tipoDato: TipoDato, var identificador: Token, var valo
     ) {
         tablaSimbolos.guardarSimboloVariable(identificador.darLexema(),tipoDato.toString(),ambito,identificador.fila,identificador.columna)
     }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if(tipoDato.valor.darLexema() != valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)){
+            erroresSemanticos.add(Error("El tipo de dato del valor no coincide con el de la inicialización",identificador.fila,identificador.columna))
+        }
+    }
 }

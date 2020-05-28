@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 open class ExpresionAritmetica(var expresion1: ExpresionAritmetica?, var operador: Token?, var expresion2: ExpresionAritmetica?, var valorNumerico : ValorNumerico?) : Expresion(){
     override fun toString(): String {
-        return "ExpresionAritmetica(expresion1=$expresion1, operador=$operador, expresion2=$expresion2)"
+        return "ExpresionAritmetica(expresion1=$expresion1, operador=$operador, expresion2=$expresion2, valorNumerico= $valorNumerico)"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

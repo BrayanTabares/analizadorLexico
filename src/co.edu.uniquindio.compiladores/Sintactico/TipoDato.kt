@@ -11,4 +11,5 @@ class TipoDato(val valor: Token) {
     fun getArbolVisual(): TreeItem<String> {
         return TreeItem("${valor.darLexema()}")
     }
+
 }
