@@ -2,12 +2,12 @@ package co.edu.uniquindio.compiladores.Sintactico
 
 import javafx.scene.control.TreeItem
 
-class ValorCadena(var valor: Valor) {
+class ValorCadena(var valor: Valor) : Valor() {
     override fun toString(): String {
-        return "ValorCadena(valor=$valor)"
+        return "$valor"
     }
 
-    fun getArbolVisual(): TreeItem<String> {
+    override fun getArbolVisual(): TreeItem<String> {
         return valor.getArbolVisual()
     }
 }

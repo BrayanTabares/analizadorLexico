@@ -1200,41 +1200,41 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         obtenerSiguienteToken()
                         val expresion2: ExpresionLogica? = esExpresionLogica()
                         if (expresion2 != null) {
-                            return ExpresionLogica(expresion1, operador, expresion2)
+                            return ExpresionLogica(expresion1, operador, expresion2,null)
                         } else {
                             reportarError("Falta expresión a operar")
                         }
                     } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() == "/") {
                         reportarError("El operador / es Unario")
                     }
-                    return ExpresionLogica(expresion1, null, null)
+                    return ExpresionLogica(expresion1, null, null,null)
                 } else {
                     reportarError("Falta cerrar la agrupación de expresión")
                 }
             }
         }
-        var valor: ExpresionLogica? = esValorLogico()
+        var valor: ValorLogico? = esValorLogico()
         if (valor != null) {
             if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() != "/") {
                 val operador: Token = tokenActual
                 obtenerSiguienteToken()
                 val expresion2: ExpresionLogica? = esExpresionLogica()
                 if (expresion2 != null) {
-                    return ExpresionLogica(valor, operador, expresion2)
+                    return ExpresionLogica(null, operador, expresion2,valor)
                 } else {
                     reportarError("Falta expresión a operar")
                 }
             } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() == "/") {
                 reportarError("El operador / es unario")
             }
-            return valor
+            return ExpresionLogica(null, null, null,valor)
         }
         if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() == "/") {
             val operador: Token = tokenActual
             obtenerSiguienteToken()
-            valor = esExpresionLogica()
+            val expresion: ExpresionLogica? = esExpresionLogica()
             if (valor != null) {
-                return ExpresionLogica(null, operador, valor)
+                return ExpresionLogica(null, operador, expresion,null)
             } else {
                 reportarError("Falta expresión a operar")
             }
@@ -1250,21 +1250,33 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     fun esValorLogico(): ValorLogico? {
         val posicion: Int = posicionActual
         val token: Token = tokenActual
+        var tipo: Valor? = esObtencionDatoArreglo()
+        if (tipo != null) {
+            return ValorLogico(tipo)
+        }
+        tokenActual = token
+        posicionActual = posicion
+        tipo = esValorInvocacion()
+        if (tipo != null) {
+            return ValorLogico(tipo)
+        }
+        tokenActual = token
+        posicionActual = posicion
         var valor: Valor? = esIdentificador()
         if (valor != null) {
-            return valor
+            return ValorLogico(valor)
         }
         tokenActual = token
         posicionActual = posicion
         valor = esValorBooleano()
         if (valor != null) {
-            return valor
+            return ValorLogico(valor)
         }
         tokenActual = token
         posicionActual = posicion
         valor = esValorRelacional()
         if (valor != null) {
-            return valor
+            return ValorLogico(valor)
         }
         tokenActual = token
         posicionActual = posicion

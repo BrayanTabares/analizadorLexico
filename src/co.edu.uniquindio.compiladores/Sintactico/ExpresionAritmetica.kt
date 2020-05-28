@@ -30,6 +30,10 @@ open class ExpresionAritmetica(var expresion1: ExpresionAritmetica?, var operado
 
             raiz.children.add(raizO)
         }else{
+            if(expresion1!=null){
+                raiz.children.add(expresion1?.getArbolVisual())
+            }
+
             if(valorNumerico!=null){
                 raiz.children.add(valorNumerico?.getArbolVisual())
             }

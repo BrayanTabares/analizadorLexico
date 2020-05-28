@@ -12,7 +12,7 @@ class ObtencionDatoArreglo (var nombre: Token, var posicion: ValorNumerico ):Val
     override fun getArbolVisual (): TreeItem<String> {
         var raiz = TreeItem("Obtención datos de arreglo")
         raiz.children.add(TreeItem("Identificador: ${nombre.darLexema()}"))
-        raiz.children.add(TreeItem("Posicion: $posicion"))
+        raiz.children.add(posicion.getArbolVisual())
         return raiz
 
     }

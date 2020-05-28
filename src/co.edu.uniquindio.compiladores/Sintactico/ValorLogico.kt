@@ -2,9 +2,11 @@ package co.edu.uniquindio.compiladores.Sintactico
 
 import javafx.scene.control.TreeItem
 
-open class ValorLogico () : ExpresionLogica(null,null,null) {
+open class ValorLogico (val valor : Valor) : Valor() {
 
     override fun getArbolVisual(): TreeItem<String> {
-        return TreeItem("Valor Lógico Vacío")
+        var raiz = TreeItem("Valor Lógico")
+        raiz.children.add(valor.getArbolVisual())
+        return raiz
     }
 }

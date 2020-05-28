@@ -4,7 +4,7 @@ import co.edu.uniquindio.compiladores.lexico.Token
 import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
-open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token?, var  expresion2: ExpresionLogica?) : Expresion(){
+open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token?, var  expresion2: ExpresionLogica?, var valor :ValorLogico?) : Expresion(){
     override fun toString(): String {
         return "ExpresionLogica(expresion1=$expresion1, operador=$operador, expresion2=$expresion2)"
     }
@@ -23,10 +23,17 @@ open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token
                 raizO.children.add(expresion2?.getArbolVisual())
             }
 
+            if(valor!=null){
+                raizO.children.add(valor?.getArbolVisual())
+            }
+
             raiz.children.add(raizO)
         }else{
             if(expresion1!=null){
                 raiz.children.add(expresion1?.getArbolVisual())
+            }
+            if(valor!=null){
+                raiz.children.add(valor?.getArbolVisual())
             }
         }
 
