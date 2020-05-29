@@ -25,4 +25,8 @@ class DeclaracionArreglo(var tipoDato: TipoDato?, var nombre: Token):ComandoArre
         tablaSimbolos.guardarSimboloVariable(nombre.darLexema(),"rolle("+tipoDato.toString()+")",ambito,nombre.fila,nombre.columna)
     }
 
+    override fun getJavaCode(): String {
+        return tipoDato!!.getJavaCode() + "[]" + nombre!!.getJavaCode()
+    }
+
 }

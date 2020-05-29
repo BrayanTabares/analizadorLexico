@@ -51,4 +51,12 @@ class ExpresionRelacional(var expresion1: Expresion, var operador: Token?, var e
             expresion2!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
         }
     }
+
+    override fun getJavaCode(): String {
+        if (expresion1!= null && operador!= null && expresion2!=null){
+            return "("+expresion1!!.getJavaCode() +")"+operador!!.getJavaCode()+expresion2!!.getJavaCode()
+        }else{
+            return expresion1!!.getJavaCode()
+        }
+    }
 }

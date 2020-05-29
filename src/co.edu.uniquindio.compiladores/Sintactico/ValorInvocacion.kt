@@ -29,4 +29,8 @@ class ValorInvocacion(var invocacion: InvocacionFuncion) : Valor() {
     override fun getToken(): Token {
         return invocacion.identificador
     }
+
+    override fun getJavaCode(): String {
+        return invocacion.getJavaCode()
+    }
 }

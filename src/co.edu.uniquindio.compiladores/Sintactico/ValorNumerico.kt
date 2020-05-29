@@ -54,4 +54,18 @@ class ValorNumerico(var signo: Token?, var  numero: Token?, var valor:Valor?) : 
             }
         }
     }
+
+    override fun getJavaCode(): String {
+        if (valor!= null && signo!=null){
+            return signo!!.getJavaCode() + valor!!.getJavaCode()
+        }
+        if (valor!= null && signo == null){
+            return valor!!.getJavaCode()
+        }
+        if (numero != null && signo != null){
+            return signo!!.getJavaCode() + numero!!.getJavaCode()
+        }else{
+            return numero!!.getJavaCode()
+        }
+    }
 }

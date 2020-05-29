@@ -113,6 +113,9 @@ class InicioController: Initializable{
         } catch (ea: Exception) {
             ea.printStackTrace()
         }
+
+
+       print(unidadCompilacion!!.getJavaCode())
     }
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
@@ -144,6 +147,6 @@ class InicioController: Initializable{
         imageD2.setImage(d2)
         imageD21.setImage(d2)
 
-        btnTraducir.setDisable(true)
+        btnTraducir.setDisable(false)
     }
 }

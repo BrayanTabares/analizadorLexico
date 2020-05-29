@@ -32,4 +32,13 @@ class CondicionSwitch(var expresion: Expresion, var listaCasos: ArrayList<Caso>)
             s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
+
+    override fun getJavaCode(): String {
+        var codigo = "switch ("+ expresion +") {"
+        for (c in listaCasos){
+            codigo+= c.getJavaCode()
+        }
+        codigo+="}"
+        return codigo
+    }
 }

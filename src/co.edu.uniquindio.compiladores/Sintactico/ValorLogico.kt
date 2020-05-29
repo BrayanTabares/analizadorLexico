@@ -30,4 +30,8 @@ open class ValorLogico (val valor : Valor) : Valor() {
         }
     }
 
+    override fun getJavaCode(): String {
+        return valor.getJavaCode()
+    }
+
 }

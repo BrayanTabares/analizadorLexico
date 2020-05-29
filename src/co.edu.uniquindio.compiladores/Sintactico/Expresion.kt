@@ -12,4 +12,8 @@ open class Expresion : Sentencia() {
     override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String):String{
         return ""
     }
+
+    override fun getJavaCode(): String {
+        return ""
+    }
 }

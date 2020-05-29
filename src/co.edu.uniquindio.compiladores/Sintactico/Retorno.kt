@@ -32,4 +32,8 @@ class Retorno(var expresion: Valor?) : Sentencia() {
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         expresion?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
     }
+
+    override fun getJavaCode(): String {
+        return "return" + expresion!!.getJavaCode()+";"
+    }
 }

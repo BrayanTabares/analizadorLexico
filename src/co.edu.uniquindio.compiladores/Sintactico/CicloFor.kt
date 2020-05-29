@@ -47,4 +47,13 @@ class CicloFor(var inicializacion: Inicializacion?,var expresionRelacional: Expr
             s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
+
+    override fun getJavaCode(): String {
+        var codigo ="for("+inicializacion!!.getJavaCode()+";"+expresionRelacional+";"+incremento.getJavaCode()+"){"
+        for (s in sentencias){
+            codigo+= s.getJavaCode()
+        }
+        codigo+="}"
+        return codigo
+    }
 }

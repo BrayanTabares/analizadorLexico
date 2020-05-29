@@ -37,4 +37,17 @@ class InvocacionFuncion(var identificador: Token, var listaArgumentos: ArrayList
             return ""
         }
     }
+
+    override fun getJavaCode(): String {
+        var codigo = identificador!!.getJavaCode() +"("
+        if (listaArgumentos.isNotEmpty()){
+            for (a in listaArgumentos){
+                codigo+= a.getJavaCode() +","
+            }
+            codigo =codigo.substring(0,codigo.length-1)
+        }
+
+        codigo+= ");"
+        return codigo
+    }
 }

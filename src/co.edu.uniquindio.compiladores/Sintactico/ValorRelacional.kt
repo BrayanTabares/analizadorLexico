@@ -24,4 +24,8 @@ class ValorRelacional(var expresion: ExpresionRelacional) : Valor(){
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
     }
+
+    override fun getJavaCode(): String {
+        return expresion.getJavaCode()
+    }
 }

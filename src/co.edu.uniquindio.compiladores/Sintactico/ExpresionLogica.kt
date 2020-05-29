@@ -69,4 +69,21 @@ open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token
             }
         }
     }
+
+    override fun getJavaCode(): String {
+        if (expresion1!= null && operador!= null && expresion2!=null){
+            return "("+expresion1!!.getJavaCode()+")"+operador!!.getJavaCode()+expresion2!!.getJavaCode()
+        }
+        if (expresion1!=null && operador ==null){
+            return expresion1!!.getJavaCode()
+        }
+        if (expresion2!= null && operador!= null && valor!=null){
+            return expresion2!!.getJavaCode() + operador!!.getJavaCode()+valor!!.getJavaCode()
+        }
+        if (expresion1==null && expresion2==null && operador ==null){
+            return valor!!.getJavaCode()
+        }else{
+            return operador!!.getJavaCode()+expresion2!!.getJavaCode()
+        }
+    }
 }

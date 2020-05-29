@@ -35,4 +35,8 @@ class Inicializacion (var tipoDato: TipoDato, var identificador: Token, var valo
             erroresSemanticos.add(Error("El tipo de dato de la inicialización (${tipoDato?.toString()}) no coincide con el del valor (${valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)})",identificador.fila,identificador.columna))
         }
     }
+
+    override fun getJavaCode(): String {
+        return tipoDato!!.getJavaCode()+" "+identificador+ " = "+valor+";"
+    }
 }

@@ -32,4 +32,8 @@ class ValorLectura(var lectura: Lectura?) : Valor() {
         lectura?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
     }
 
+    override fun getJavaCode(): String {
+        return lectura!!.getJavaCode()
+    }
+
 }

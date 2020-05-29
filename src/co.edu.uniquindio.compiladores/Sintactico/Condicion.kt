@@ -6,4 +6,8 @@ open class Condicion : Sentencia() {
     override fun getArbolVisual(): TreeItem<String> {
         return TreeItem("Condición Vacía")
     }
+
+    override fun getJavaCode(): String {
+        return ""
+    }
 }
