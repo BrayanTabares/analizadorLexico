@@ -17,4 +17,5 @@ open class Valor : Expresion() {
     open fun getToken ():Token {
         return Token("",Categoria.CADENA,0,0)
     }
+
 }

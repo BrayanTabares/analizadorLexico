@@ -26,10 +26,18 @@ class Retorno(var expresion: Valor?) : Sentencia() {
         if(expresion!=null){
            return expresion!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
         }
-        return ""
+        return "void"
     }
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         expresion?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+    }
+
+    override fun getJavaCode(): String {
+        if(expresion!=null){
+            return "return "+expresion!!.getJavaCode()+";"
+        }else{
+            return "return;"
+        }
     }
 }

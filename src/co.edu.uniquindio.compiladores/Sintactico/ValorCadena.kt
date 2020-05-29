@@ -29,4 +29,8 @@ class ValorCadena(var valor: Valor) : Valor() {
 
     }
 
+    override fun getJavaCode(): String {
+        return valor.getJavaCode()
+    }
+
 }

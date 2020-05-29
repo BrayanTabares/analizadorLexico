@@ -25,4 +25,8 @@ class ValorBooleano(var valor: Token) : Valor(){
     override fun getToken(): Token {
         return valor
     }
+
+    override fun getJavaCode(): String {
+        return valor.getJavaCode()
+    }
 }

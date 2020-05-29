@@ -25,4 +25,8 @@ class Incremento(var nombre: Token, var tipoIncremento: Token) : Sentencia() {
             }
         }
     }
+
+    override fun getJavaCode(): String {
+        return nombre.getJavaCode()+" "+tipoIncremento.getJavaCode()+";"
+    }
 }

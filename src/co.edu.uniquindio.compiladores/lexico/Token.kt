@@ -38,6 +38,12 @@ class Token(var lexema:String, var categoria: Categoria, var fila:Int, var colum
         if(categoria==Categoria.IDENTIFICADOR){
             return lexema.substring(1)
         }
+        if(categoria==Categoria.OPERADOR_INCREMENTO){
+            return "++"
+        }
+        if(categoria==Categoria.OPERADOR_DECREMENTO){
+            return "--"
+        }
         return "[Sin Traducción:+${categoria.name}]"
     }
 }

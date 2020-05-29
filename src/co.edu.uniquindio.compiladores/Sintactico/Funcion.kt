@@ -53,17 +53,18 @@ class Funcion (var nombre : Token, var parametros : ArrayList<Parametro>, var ti
 
     fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>) {
         var ward: Boolean = true
-        var tipo:String?=null
+        var tipo:String="void"
+        var tipoRetorno:String="void"
         for(s in sentencias){
             s.analizarSemantica(tablaSimbolos, erroresSemanticos, this.toString())
             if(s is Retorno){
                 ward=false
-                 tipo=s.obtenerTipo(tablaSimbolos,erroresSemanticos,this.toString())
-                if(tipo==""){
-                    tipo=null
+                 tipoRetorno=s.obtenerTipo(tablaSimbolos,erroresSemanticos,this.toString())
+                if(tipoDato!=null){
+                    tipo=tipoDato.toString()
                 }
-                if( tipo != tipoDato.toString()){
-                    erroresSemanticos.add(Error("El tipo del retorno del método ${nombre.darLexema()} (${tipoDato}) no es compatible con ${tipo}",nombre.fila,nombre.columna))
+                if( tipo != tipoRetorno){
+                    erroresSemanticos.add(Error("El tipo del retorno del método ${nombre.darLexema()} (${tipo}) no es compatible con ${tipoRetorno}",nombre.fila,nombre.columna))
                 }
             }
         }

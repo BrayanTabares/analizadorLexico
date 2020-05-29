@@ -8,13 +8,15 @@ import javafx.scene.control.TreeItem
 
 class ValorNumerico(var signo: Token?, var  numero: Token?, var valor:Valor?) : Valor() {
     override fun toString(): String {
-        return if(signo==null){
-            numero.toString()
+        var signoCadena = ""
+        if(signo!=null){
+            signoCadena= signo!!.darLexema()
         }else if(numero!=null){
-            signo!!.darLexema()+" "+numero!!.darLexema();
+            signoCadena+" "+numero!!.darLexema();
         }else{
-            signo!!.darLexema()+" "+valor!!.toString();
+            signoCadena+" "+valor!!.toString();
         }
+        return ""
     }
 
     override fun getArbolVisual(): TreeItem<String> {
@@ -53,5 +55,18 @@ class ValorNumerico(var signo: Token?, var  numero: Token?, var valor:Valor?) : 
                 erroresSemanticos.add(Error("El identificador ${valor.toString()} no corresponde a un valor numérico",valor!!.getToken().fila,valor!!.getToken().columna))
             }
         }
+    }
+
+    override fun getJavaCode(): String {
+        var codigo = ""
+        var signoCadena = ""
+        if(signo!=null){
+            signoCadena= signo!!.getJavaCode()
+        }else if(numero!=null){
+            signoCadena+numero!!.getJavaCode();
+        }else{
+            signoCadena+valor!!.getJavaCode();
+        }
+        return codigo
     }
 }

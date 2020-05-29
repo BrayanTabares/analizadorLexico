@@ -32,4 +32,8 @@ class Identificador (var identificador: Token) : Valor() {
     override fun getToken(): Token {
         return identificador
     }
+
+    override fun getJavaCode(): String {
+        return identificador.getJavaCode()
+    }
 }

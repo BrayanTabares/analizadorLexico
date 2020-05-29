@@ -52,4 +52,20 @@ class CondicionIf(var expresion: ExpresionLogica, var sentencias: ArrayList<Sent
         }
     }
 
+    override fun getJavaCode(): String {
+        var codigo = "if(" + expresion.getJavaCode() + "){"
+        for (sentencia in sentencias) {
+            codigo += sentencia.getJavaCode()
+        }
+        codigo += "}"
+        if( sentenciasElse!=null ){
+            codigo += "else{"
+            for (sentencia in sentenciasElse) {
+                codigo += sentencia.getJavaCode()
+            }
+            codigo += "}"
+        }
+        return codigo
+    }
+
 }
