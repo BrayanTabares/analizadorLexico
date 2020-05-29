@@ -31,8 +31,4 @@ class ValorLectura(var lectura: Lectura) : Valor() {
         return lectura.getJavaCode()
     }
 
-    override fun getJavaCode(): String {
-        return lectura!!.getJavaCode()
-    }
-
 }
