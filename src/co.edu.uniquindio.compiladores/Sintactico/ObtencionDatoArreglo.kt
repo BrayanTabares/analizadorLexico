@@ -47,4 +47,8 @@ class ObtencionDatoArreglo (var nombre: Token, var posicion: ValorNumerico ):Val
         posicion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
     }
 
+    override fun getJavaCode(): String {
+        return nombre!!.getJavaCode()+"["+posicion.getJavaCode()+"]"
+    }
+
 }

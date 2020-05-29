@@ -33,4 +33,8 @@ class Caso(var expresion: Expresion, var contenido: ContenidoCaso?) {
         expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
 
     }
+
+    fun getJavaCode():String{
+        return "case " + expresion+":" + contenido!!.getJavaCode()
+    }
 }

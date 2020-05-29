@@ -42,4 +42,23 @@ class ContenidoCaso( var listaSentencias: ArrayList<Sentencia>, var contenido: C
             s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
+
+    fun getJavaCode():String{
+        var codigo=""
+        if (listaSentencias.isNotEmpty()){
+            for (s in listaSentencias){
+                codigo += s.getJavaCode()
+            }
+        }
+        if (contenido != null){
+            codigo+= contenido!!.getJavaCode()
+        }
+        if (caso != null){
+            codigo = caso!!.getJavaCode()
+        }
+        if (contenido == null && caso == null){
+            codigo += "break"
+        }
+        return codigo
+    }
 }

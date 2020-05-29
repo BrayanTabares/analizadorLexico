@@ -87,4 +87,19 @@ open class ExpresionAritmetica(var expresion1: ExpresionAritmetica?, var operado
             valorNumerico!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
         }
     }
+
+    override fun getJavaCode(): String {
+        var codigo=""
+        if (expresion1!=null && expresion2 != null && operador!= null){
+            return "("+expresion1!!.getJavaCode() +")"+ operador!!.getJavaCode() + expresion2!!.getJavaCode()
+        }
+        if (expresion1 != null && operador== null && valorNumerico== null &&  expresion2== null){
+            return expresion1!!.getJavaCode()
+        }
+        if (expresion2!=null && valorNumerico!= null && operador!= null){
+            return expresion2!!.getJavaCode() + operador!!.getJavaCode() + valorNumerico!!.getJavaCode()
+        }else{
+            return valorNumerico!!.getJavaCode()
+        }
+    }
 }

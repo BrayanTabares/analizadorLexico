@@ -36,4 +36,8 @@ class InicializacionArreglo(var tipo: TipoDato?, var nombre: Token, var cantidad
             erroresSemanticos.add(Error("El tipo del arreglo de la inicialización ${tipo?.valor?.darLexema()} no es compatible con el del valor (${tipo2?.valor?.darLexema()})",nombre.fila,nombre.columna))
         }
     }
+
+    override fun getJavaCode(): String {
+        return tipo!!.getJavaCode() + "[] "+ nombre.getJavaCode() + " = "+ tipo2!!.getJavaCode() + "["+cantidad+"]"
+    }
 }

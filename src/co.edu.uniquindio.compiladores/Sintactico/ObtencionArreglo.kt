@@ -31,4 +31,8 @@ class ObtencionArreglo(var tipo: TipoDato?, var cantidad: ValorNumerico): Valor(
     ): String {
         return "rolle("+tipo.toString()+")"
     }
+
+    override fun getJavaCode(): String {
+        return tipo!!.getJavaCode()+"["+cantidad.getJavaCode()+"]"
+    }
 }

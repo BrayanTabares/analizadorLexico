@@ -31,4 +31,8 @@ class Asignacion (var identificador : Token, var valor: Valor): Sentencia() {
         }
     }
 
+    override fun getJavaCode(): String {
+        return identificador.getJavaCode() + " = " +valor.getJavaCode() + " ;"
+    }
+
 }

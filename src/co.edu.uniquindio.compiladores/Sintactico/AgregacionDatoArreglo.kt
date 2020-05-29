@@ -36,4 +36,8 @@ class AgregacionDatoArreglo (var nombre: Token, var posicion: ValorNumerico, var
             }
         }
     }
+
+    override fun getJavaCode(): String {
+        return nombre.getJavaCode() + " ["+posicion +"] = " +valor +";"
+    }
 }

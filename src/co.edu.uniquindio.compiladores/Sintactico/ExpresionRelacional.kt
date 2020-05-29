@@ -53,11 +53,10 @@ class ExpresionRelacional(var expresion1: Expresion, var operador: Token?, var e
     }
 
     override fun getJavaCode(): String {
-        if(expresion2==null) {
-            return expresion1.getJavaCode()
-        } else if(expresion2 !=null){
-            return expresion1.getJavaCode()+" "+operador!!.getJavaCode()+" "+ expresion2!!.getJavaCode()
+        if (expresion1!= null && operador!= null && expresion2!=null){
+            return "("+expresion1!!.getJavaCode() +")"+operador!!.getJavaCode()+expresion2!!.getJavaCode()
+        }else{
+            return expresion1!!.getJavaCode()
         }
-        return "ExpresionRelacional(expresion1=$expresion1, operador=$operador, expresion2=$expresion2)"
     }
 }

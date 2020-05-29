@@ -21,4 +21,8 @@ class ExpresionCaracter(var caracter: Token) :Expresion(){
     override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
         return "zeichen"
     }
+
+    override fun getJavaCode(): String {
+        return caracter!!.getJavaCode()
+    }
 }

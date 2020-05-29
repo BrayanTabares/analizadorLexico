@@ -32,4 +32,16 @@ class Declaracion (var tipoDato:TipoDato, var listaIdentificadores : ArrayList<T
             tablaSimbolos.guardarSimboloVariable(s.darLexema(),tipoDato.toString(),ambito,s.fila,s.columna)
         }
     }
+
+    override fun getJavaCode(): String {
+        var codigo = tipoDato.getJavaCode()+" "
+        if (listaIdentificadores.isNotEmpty()){
+            for (i in listaIdentificadores){
+                codigo+= i.getJavaCode()+","
+            }
+            codigo = codigo.substring(0, codigo.length-1)
+        }
+        codigo+= ";"
+        return codigo
+    }
 }
