@@ -38,6 +38,6 @@ class InicializacionArreglo(var tipo: TipoDato?, var nombre: Token, var cantidad
     }
 
     override fun getJavaCode(): String {
-        return tipo!!.getJavaCode() + "[] "+ nombre.getJavaCode() + " = "+ tipo2!!.getJavaCode() + "["+cantidad+"]"
+        return tipo!!.getJavaCode() + "[] "+ nombre.getJavaCode() + " = "+ tipo2!!.getJavaCode() + "["+cantidad.getJavaCode()+"];"
     }
 }
