@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class CicloFor(var inicializacion: Inicializacion?,var expresionRelacional: ExpresionRelacional, var incremento: Incremento, var sentencias: ArrayList<Sentencia>) : Iterador(){
     override fun toString(): String {
-        return "CicloFor(inicializacion=$inicializacion, expresionRelacional=$expresionRelacional, incremento=$incremento, sentencias=$sentencias)"
+        return "kreis [${incremento.nombre.fila},${incremento.nombre.columna}]"
     }
 
     override fun getArbolVisual(): TreeItem<String> {
@@ -33,18 +33,18 @@ class CicloFor(var inicializacion: Inicializacion?,var expresionRelacional: Expr
         erroresSemanticos: ArrayList<Error>,
         ambito: String
     ) {
-        inicializacion?.llenarTablaSimbolos(tablaSimbolos,erroresSemanticos,ambito)
+        inicializacion?.llenarTablaSimbolos(tablaSimbolos,erroresSemanticos,"$ambito")
         for(s in sentencias){
-            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito")
         }
     }
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
-        inicializacion?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
-        expresionRelacional.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
-        incremento.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        inicializacion?.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito")
+        expresionRelacional.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito")
+        incremento.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito")
         for(s in sentencias){
-            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito")
         }
     }
 }

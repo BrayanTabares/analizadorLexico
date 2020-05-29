@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class ValorInvocacion(var invocacion: InvocacionFuncion) : Valor() {
     override fun toString(): String {
-        return "${invocacion})"
+        return "${invocacion}"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

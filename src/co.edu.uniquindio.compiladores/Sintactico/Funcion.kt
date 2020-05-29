@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class Funcion (var nombre : Token, var parametros : ArrayList<Parametro>, var tipoDato : TipoDato?, var sentencias : ArrayList<Sentencia> ) {
     override fun toString(): String {
-        return "Funcion(nombre=$nombre, parametros=$parametros, tipoDato=$tipoDato, sentencias=$sentencias)"
+        return "${nombre.darLexema()}"+obtenerTiposParametros()
     }
 
     fun getArbolVisual(): TreeItem<String> {
@@ -44,10 +44,10 @@ class Funcion (var nombre : Token, var parametros : ArrayList<Parametro>, var ti
     fun llenarTablaSimbolos(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>) {
         tablaSimbolos.guardarSimboloFuncion(nombre.darLexema(),tipoDato.toString(),obtenerTiposParametros(),nombre.fila,nombre.columna)
         for(p in parametros){
-            p.llenarTablaSimbolos(tablaSimbolos,nombre.darLexema())
+            p.llenarTablaSimbolos(tablaSimbolos,this.toString())
         }
         for(s in sentencias){
-            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, nombre.darLexema())
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, this.toString())
         }
     }
 
@@ -55,10 +55,10 @@ class Funcion (var nombre : Token, var parametros : ArrayList<Parametro>, var ti
         var ward: Boolean = true
         var tipo:String?=null
         for(s in sentencias){
-            s.analizarSemantica(tablaSimbolos, erroresSemanticos, nombre.darLexema())
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, this.toString())
             if(s is Retorno){
                 ward=false
-                 tipo=s.obtenerTipo(tablaSimbolos,erroresSemanticos,nombre.darLexema())
+                 tipo=s.obtenerTipo(tablaSimbolos,erroresSemanticos,this.toString())
                 if(tipo==""){
                     tipo=null
                 }

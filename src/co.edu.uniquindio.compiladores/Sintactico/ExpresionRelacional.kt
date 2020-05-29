@@ -37,4 +37,13 @@ class ExpresionRelacional(var expresion1: Expresion, var operador: Token?, var e
     override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
         return "dich"
     }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if(expresion1!=null){
+            expresion1.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+        if(expresion2!=null){
+            expresion2!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+    }
 }

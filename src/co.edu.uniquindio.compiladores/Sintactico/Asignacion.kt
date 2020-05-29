@@ -8,7 +8,7 @@ import javafx.scene.control.TreeItem
 
 class Asignacion (var identificador : Token, var valor: Valor): Sentencia() {
     override fun toString(): String {
-        return "Asignacion(identificador=$identificador, valor=$valor)"
+        return "$identificador = $valor"
     }
 
     override fun getArbolVisual(): TreeItem<String> {
@@ -24,8 +24,8 @@ class Asignacion (var identificador : Token, var valor: Valor): Sentencia() {
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         val simbolo : Simbolo? = tablaSimbolos.buscarSimboloVariable(identificador.darLexema(),ambito)
-        if(simbolo==null){
-            erroresSemanticos.add(Error("La variable ${identificador.darLexema()} no existe",identificador.fila,identificador.columna))
+        if(simbolo==null || simbolo.fila >identificador.fila){
+            erroresSemanticos.add(Error("La variable ${identificador.darLexema()} no existe o no fue declarada antes",identificador.fila,identificador.columna))
         }else if(simbolo.tipo != valor.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)){
             erroresSemanticos.add(Error("El tipo de dato de la asignación (${simbolo.tipo}) no coincide con el del valor (${valor.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)})",identificador.fila,identificador.columna))
         }

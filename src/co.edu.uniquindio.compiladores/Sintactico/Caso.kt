@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class Caso(var expresion: Expresion, var contenido: ContenidoCaso?) {
     override fun toString(): String {
-        return "Caso(expresion=$expresion, contenido=$contenido)"
+        return "fill $expresion ? $contenido"
     }
 
     fun getArbolVisual(): TreeItem<String>? {

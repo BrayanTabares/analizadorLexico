@@ -17,12 +17,12 @@ class Incremento(var nombre: Token, var tipoIncremento: Token) : Sentencia() {
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         val simbolo : Simbolo? = tablaSimbolos.buscarSimboloVariable(nombre.darLexema(),ambito)
-        if(simbolo!=null) {
+        if(simbolo==null|| simbolo.fila > nombre.fila) {
+            erroresSemanticos.add(Error("El identificador ${nombre.darLexema()} no existe o no fue declarada antes",nombre.fila,nombre.columna))
+        }else{
             if(simbolo.tipo!="ganz" && simbolo.tipo!="echt"){
                 erroresSemanticos.add(Error("El identificador ${nombre.darLexema()} no posee un tipo de dato de incremento",nombre.fila,nombre.columna))
             }
-        }else{
-            erroresSemanticos.add(Error("El identificador ${nombre.darLexema()} no existe",nombre.fila,nombre.columna))
         }
     }
 }

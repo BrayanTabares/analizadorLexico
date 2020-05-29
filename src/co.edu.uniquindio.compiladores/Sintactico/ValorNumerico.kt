@@ -49,7 +49,7 @@ class ValorNumerico(var signo: Token?, var  numero: Token?, var valor:Valor?) : 
         if(valor!=null){
             valor!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
             val tipo:String?=valor!!.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
-            if(tipo!="ganz" || tipo != "echt"){
+            if(tipo!="ganz" && tipo != "echt"){
                 erroresSemanticos.add(Error("El identificador ${valor.toString()} no corresponde a un valor numérico",valor!!.getToken().fila,valor!!.getToken().columna))
             }
         }

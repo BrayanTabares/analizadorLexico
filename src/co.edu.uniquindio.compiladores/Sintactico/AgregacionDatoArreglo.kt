@@ -23,8 +23,8 @@ class AgregacionDatoArreglo (var nombre: Token, var posicion: ValorNumerico, var
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         val simbolo : Simbolo? = tablaSimbolos.buscarSimboloVariable(nombre.darLexema(),ambito)
-        if(simbolo==null) {
-            erroresSemanticos.add(Error("el arreglo ${nombre.darLexema()} no existe", nombre.fila, nombre.columna))
+        if(simbolo==null || simbolo.fila >nombre.fila) {
+            erroresSemanticos.add(Error("el arreglo ${nombre.darLexema()} no existe o no fue declarada antes", nombre.fila, nombre.columna))
         }else{
             val tipo :String? = simbolo.tipo
             if(tipo!=null) {

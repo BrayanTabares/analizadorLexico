@@ -16,13 +16,17 @@ class Identificador (var identificador: Token) : Valor() {
     }
 
     override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
-        val tipo : String? = tablaSimbolos.buscarSimboloVariable(identificador.darLexema(),ambito)?.tipo
-        if(tipo!=null) {
-            return tipo
-        }else{
-            erroresSemanticos.add(Error("El identificador ${identificador.darLexema()} no existe",identificador.fila,identificador.columna))
+        val simbolo : Simbolo? = tablaSimbolos.buscarSimboloVariable(identificador.darLexema(),ambito)
+        if(simbolo==null || simbolo.fila > identificador.fila){
+            erroresSemanticos.add(Error("El identificador ${identificador.darLexema()} no existe o no fue declarado antes",identificador.fila,identificador.columna))
             return ""
+        }else {
+            val tipo : String? = simbolo.tipo
+            if(tipo!=null) {
+                return tipo
+            }
         }
+       return ""
     }
 
     override fun getToken(): Token {

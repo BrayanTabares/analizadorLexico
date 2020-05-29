@@ -1,6 +1,7 @@
 package co.edu.uniquindio.compiladores.Sintactico
 import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.Simbolo
 import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
@@ -22,17 +23,20 @@ class ObtencionDatoArreglo (var nombre: Token, var posicion: ValorNumerico ):Val
         erroresSemanticos: ArrayList<Error>,
         ambito: String
     ): String {
-        val tipo : String? = tablaSimbolos.buscarSimboloVariable(nombre.darLexema(),ambito)?.tipo
-        if(tipo!=null) {
-            if(tipo.contains("rolle")){
-                return tipo.substring(6,tipo.length-1)
-            }else{
-                erroresSemanticos.add(Error("El identificador ${nombre.darLexema()} no corresponde a un arreglo",nombre.fila,nombre.columna))
+        val simbolo : Simbolo? = tablaSimbolos.buscarSimboloVariable(nombre.darLexema(),ambito)
+        if(simbolo==null|| simbolo.fila > nombre.fila){
+            erroresSemanticos.add(Error("El arreglo ${nombre.darLexema()} no existe o no fue declarada antes",nombre.fila,nombre.columna))
+        } else{
+            val tipo :String?=simbolo.tipo
+            if(tipo!=null) {
+                if(tipo.contains("rolle")){
+                    return tipo.substring(6,tipo.length-1)
+                }else{
+                    erroresSemanticos.add(Error("El identificador ${nombre.darLexema()} no corresponde a un arreglo",nombre.fila,nombre.columna))
+                }
             }
-        }else{
-            erroresSemanticos.add(Error("El arreglo ${nombre.darLexema()} no existe",nombre.fila,nombre.columna))
         }
-        return ""+tipo
+        return ""
     }
 
     override fun getToken(): Token {
