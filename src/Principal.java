@@ -1,1 +1,1 @@
-import javax.swing.JOptionPane; public class Principal {public static void main (String[] args){JOptionPane.showMessageDialog(null,"Hola Mundo"+"");}}
+import javax.swing.JOptionPane; public class Principal {public static void main (String[] args){JOptionPane.showMessageDialog(null,"Hola mundo"+"");main(8,"hola");}public static void main (int a,String b){JOptionPane.showMessageDialog(null,"me llamaron"+"");}}

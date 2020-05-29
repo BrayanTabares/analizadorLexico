@@ -58,15 +58,16 @@ class ValorNumerico(var signo: Token?, var  numero: Token?, var valor:Valor?) : 
     }
 
     override fun getJavaCode(): String {
-        var codigo = ""
-        var signoCadena = ""
-        if(signo!=null){
-            signoCadena= signo!!.getJavaCode()
-        }else if(numero!=null){
-            signoCadena+numero!!.getJavaCode();
-        }else{
-            signoCadena+valor!!.getJavaCode();
+        if (valor!= null && signo!=null){
+            return signo!!.getJavaCode() + valor!!.getJavaCode()
         }
-        return codigo
+        if (valor!= null && signo == null){
+            return valor!!.getJavaCode()
+        }
+        if (numero != null && signo != null){
+            return signo!!.getJavaCode() + numero!!.getJavaCode()
+        }else{
+            return numero!!.getJavaCode()
+        }
     }
 }
