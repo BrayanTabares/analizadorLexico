@@ -26,4 +26,8 @@ open class ValorExpresion (var expresion: Expresion) : Valor() {
         expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
     }
 
+    override fun getJavaCode(): String {
+        return expresion.getJavaCode()
+    }
+
 }

@@ -17,7 +17,27 @@ class Token(var lexema:String, var categoria: Categoria, var fila:Int, var colum
     }
 
     fun getJavaCode() :String {
-
-        return ""
+        if(categoria==Categoria.CADENA){
+            return lexema.replace("*","\"")
+        }
+        if(categoria==Categoria.DATO_ENTERO){
+            return "int"
+        }
+        if(categoria==Categoria.DATO_REAL){
+            return "double"
+        }
+        if(categoria==Categoria.DATO_BOOLEAN){
+            return "boolean"
+        }
+        if(categoria==Categoria.DATO_CARACTER){
+            return "char"
+        }
+        if(categoria==Categoria.DATO_STRING){
+            return "String"
+        }
+        if(categoria==Categoria.IDENTIFICADOR){
+            return lexema.substring(1)
+        }
+        return "[Sin Traducción:+${categoria.name}]"
     }
 }

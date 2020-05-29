@@ -85,6 +85,7 @@ class InicioController: Initializable{
                      }else{
                          btnTraducir.setDisable(false)
                          unidadCompilacion=uc
+                         println(uc.getJavaCode())
                      }
                  }
                  if(!sintaxis.listaErrores.isEmpty()){

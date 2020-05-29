@@ -28,4 +28,12 @@ class ExpresionCadena(var cadena: Token, var  valor: ArrayList<ValorCadena>) : E
     override fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
         return "fessel"
     }
+
+    override fun getJavaCode(): String {
+        var codigo = cadena.getJavaCode()
+        for(v in valor){
+            codigo+="+"+v.getJavaCode()
+        }
+        return codigo
+    }
 }

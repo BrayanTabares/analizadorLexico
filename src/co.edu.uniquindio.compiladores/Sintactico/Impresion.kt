@@ -22,6 +22,10 @@ class Impresion (var expresion : Valor?) : Sentencia() {
     }
 
     override fun getJavaCode(): String {
-        return "JOptionPane.showMessageDialog("+expresion?.getJavaCode()+"+\"\");"
+        var cadena=""
+        if(expresion!=null){
+            cadena=expresion?.getJavaCode()+"+"
+        }
+        return "JOptionPane.showMessageDialog(null,$cadena\"\");"
     }
 }
