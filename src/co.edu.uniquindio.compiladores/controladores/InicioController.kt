@@ -71,30 +71,30 @@ class InicioController: Initializable{
              if(lexico.listaErroes.isEmpty()){
                  val sintaxis = AnalizadorSintactico( lexico.listaTokens )
                  val uc = sintaxis.esUnidadDeCompilacion()
-                 if(uc!=null){
-                     arbolVisual.root = uc.getArbolVisual()
-                     val semantico=AnalizadorSemantico(uc)
-                     semantico.llenarTablaSimbolos()
-                     println(semantico.tablaSimbolos)
-                     semantico.analizarSemantica()
-                     if(!semantico.erroresSemanticos.isEmpty()){
-                         tablaErroresS1.items = FXCollections.observableArrayList(semantico.erroresSemanticos)
-                         var alerta = Alert(Alert.AlertType.ERROR)
-                         alerta.contentText = "Hay errores semánticos en el código fuente"
-                         alerta.show()
-                     }else{
-                         btnTraducir.setDisable(false)
-                         unidadCompilacion=uc
-                         println(uc.getJavaCode())
-                     }
-                 }
                  if(!sintaxis.listaErrores.isEmpty()){
                      tablaErroresS.items = FXCollections.observableArrayList(sintaxis.listaErrores)
                      var alerta = Alert(Alert.AlertType.ERROR)
                      alerta.contentText = "Hay errores sintácticos en el código fuente"
                      alerta.show()
+                 } else {
+                     if(uc!=null){
+                         arbolVisual.root = uc.getArbolVisual()
+                         val semantico=AnalizadorSemantico(uc)
+                         semantico.llenarTablaSimbolos()
+                         println(semantico.tablaSimbolos)
+                         semantico.analizarSemantica()
+                         if(!semantico.erroresSemanticos.isEmpty()){
+                             tablaErroresS1.items = FXCollections.observableArrayList(semantico.erroresSemanticos)
+                             var alerta = Alert(Alert.AlertType.ERROR)
+                             alerta.contentText = "Hay errores semánticos en el código fuente"
+                             alerta.show()
+                         }else{
+                             btnTraducir.setDisable(false)
+                             unidadCompilacion=uc
+                             println(uc.getJavaCode())
+                         }
+                     }
                  }
-
              } else {
                  var alerta = Alert(Alert.AlertType.ERROR)
                  alerta.contentText = "Hay errores lexicos en el código fuente"
@@ -148,6 +148,6 @@ class InicioController: Initializable{
         imageD2.setImage(d2)
         imageD21.setImage(d2)
 
-        btnTraducir.setDisable(false)
+        btnTraducir.setDisable(true)
     }
 }

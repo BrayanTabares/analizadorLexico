@@ -4,7 +4,7 @@ import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
-class CicloWhile( var expresionL: ExpresionLogica, var sentencias: ArrayList<Sentencia>) : Iterador() {
+class CicloWhile( var expresionL: Valor, var sentencias: ArrayList<Sentencia>) : Iterador() {
     override fun toString(): String {
         return "reprise <$expresionL> ( $sentencias )"
     }
@@ -35,6 +35,10 @@ class CicloWhile( var expresionL: ExpresionLogica, var sentencias: ArrayList<Sen
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         expresionL.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
+        val tipo = expresionL.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
+        if(tipo!="dich"){
+            erroresSemanticos.add(Error("El valor de la condicion del if ($tipo) no es un valor lógico",expresionL.getToken().fila,expresionL.getToken().columna))
+        }
         for(s in sentencias){
             s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }

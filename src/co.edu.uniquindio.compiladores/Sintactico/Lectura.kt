@@ -4,7 +4,7 @@ import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
-class Lectura (var expresion : Valor?) : Sentencia() {
+class Lectura (var expresion : Valor?, var tipo : TipoDato?) : Sentencia() {
     override fun toString(): String {
         return "lessen <$expresion>"
     }
@@ -22,7 +22,10 @@ class Lectura (var expresion : Valor?) : Sentencia() {
         erroresSemanticos: ArrayList<Error>,
         ambito: String
     ): String {
-        return "fessel"
+        if(tipo==null){
+            return "fessel"
+        }
+        return tipo.toString()
     }
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
@@ -30,6 +33,27 @@ class Lectura (var expresion : Valor?) : Sentencia() {
     }
 
     override fun getJavaCode(): String {
-        return "JOptionPane.showInputDialog("+expresion!!.getJavaCode()+");"
+        var valor=""
+        if(expresion!=null){
+            valor=expresion?.getJavaCode()+"+"
+        }
+        var cadena= "JOptionPane.showInputDialog(null,$valor\"\")"
+        if(tipo!=null){
+            when(tipo.toString()){
+                "ganz" -> {
+                    return "Integer.parseInt($cadena);"
+                }
+                "echt" -> {
+                    return "Double.parseDouble($cadena);"
+                }
+                "dich" -> {
+                    return "Boolean.parseBoolean($cadena);"
+                }
+                "zeichen" -> {
+                    return "$cadena.charAt(0);"
+                }
+            }
+        }
+        return cadena+";"
     }
 }

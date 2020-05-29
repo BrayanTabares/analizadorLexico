@@ -140,8 +140,19 @@ class Token(var lexema:String, var categoria: Categoria, var fila:Int, var colum
         if (categoria == Categoria.IDENTIFICADOR){
             return lexema.substring(1,lexema.length)
         }
+        if(categoria==Categoria.OPERADOR_INCREMENTO){
+            return "++"
+        }
+        if(categoria==Categoria.OPERADOR_DECREMENTO){
+            return "--"
+        }
+        if(categoria==Categoria.ENTERO){
+            return lexema
+        }
+        if(categoria==Categoria.DECIMAL){
+            return lexema.replace("'",".")
+        }
 
-
-        return lexema
+        return "[Sin Traducción:+${categoria.name}]"
     }
 }

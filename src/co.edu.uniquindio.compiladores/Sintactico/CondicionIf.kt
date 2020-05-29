@@ -4,7 +4,7 @@ import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
-class CondicionIf(var expresion: ExpresionLogica, var sentencias: ArrayList<Sentencia>, var sentenciasElse: ArrayList<Sentencia>): Condicion() {
+class CondicionIf(var expresion: Valor, var sentencias: ArrayList<Sentencia>, var sentenciasElse: ArrayList<Sentencia>): Condicion() {
     override fun toString(): String {
         return "wenn <$expresion> ( $sentencias ) ( $sentenciasElse )"
     }
@@ -44,6 +44,10 @@ class CondicionIf(var expresion: ExpresionLogica, var sentencias: ArrayList<Sent
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
+        val tipo = expresion.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito)
+        if(tipo!="dich"){
+            erroresSemanticos.add(Error("El valor de la condicion del if ($tipo) no es un valor lógico",expresion.getToken().fila,expresion.getToken().columna))
+        }
         for(s in sentencias){
             s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this if")
         }

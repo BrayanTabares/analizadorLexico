@@ -325,7 +325,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Ciclo While> ::= “reprise” “<” <Expresion Logica> “>” “(”  [<Lista Sentencias>] “)”
+     * <Ciclo While> ::= “reprise” “<” <Valor> “>” “(”  [<Lista Sentencias>] “)”
      */
     fun esCicloWhile(): CicloWhile? {
         if (tokenActual.darTipo() == Categoria.CICLO_WHILE) {
@@ -334,8 +334,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 tokenActual.darLexema() == "<"
             ) {
                 obtenerSiguienteToken()
-                val expresionL: ExpresionLogica? = esExpresionLogica()
-                if (expresionL != null) {
+                val valor: Valor? = esValor()
+                if (valor!= null) {
                     if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                         tokenActual.darLexema() == ">"
                     ) {
@@ -348,7 +348,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                             if (tokenActual.darTipo() == Categoria.BLOQUE_SENTENCIA && tokenActual.darLexema() == ")"
                             ) {
                                 obtenerSiguienteToken()
-                                return CicloWhile(expresionL, sentencias)
+                                return CicloWhile(valor, sentencias)
                             } else {
                                 reportarError("Falta cerrar bloque de sentencia ciclo while")
                             }
@@ -502,9 +502,10 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <lectura> ::= "lesen" "<" [<Valor>] ">" "!"
+     * <lectura> ::= "lesen" "<" [<Valor>] [":" <Tipo Dato>]">" "!"
      */
     fun esLectura(): Lectura? {
+        var tipo : TipoDato?= null
         if (tokenActual.darTipo() == Categoria.LECTURA &&
             tokenActual.darLexema() == "lesen"
         ) {
@@ -514,13 +515,21 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             ) {
                 obtenerSiguienteToken()
                 val expresion: Valor? = esValor()
+                if (tokenActual.darTipo() == Categoria.OPERADOR_SEPARACION
+                ) {
+                    obtenerSiguienteToken()
+                    tipo = esTipoDato()
+                    if(tipo==null){
+                        reportarError("Falta tipo de dato de lectura")
+                    }
+                }
                 if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                     tokenActual.darLexema() == ">"
                 ) {
                     obtenerSiguienteToken()
                     if (tokenActual.darTipo() == Categoria.OPERADOR_TERMINAL) {
                         obtenerSiguienteToken()
-                        return Lectura(expresion)
+                        return Lectura(expresion,tipo)
                     } else {
                         reportarError("Falta operador terminal de lectura")
                     }
@@ -538,6 +547,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * <lectura> ::= "lesen" "<" [<Valor>] ">"
      */
     fun esValorLectura(): ValorLectura? {
+        var tipo : TipoDato?= null
         if (tokenActual.darTipo() == Categoria.LECTURA &&
             tokenActual.darLexema() == "lesen"
         ) {
@@ -547,11 +557,19 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
             ) {
                 obtenerSiguienteToken()
                 val expresion: Valor? = esValor()
+                if (tokenActual.darTipo() == Categoria.OPERADOR_SEPARACION
+                ) {
+                    obtenerSiguienteToken()
+                    tipo = esTipoDato()
+                    if(tipo==null){
+                        reportarError("Falta tipo de dato de lectura")
+                    }
+                }
                 if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                     tokenActual.darLexema() == ">"
                 ) {
                     obtenerSiguienteToken()
-                    return ValorLectura(Lectura(expresion))
+                    return ValorLectura(Lectura(expresion,tipo))
 
                 } else {
                     reportarError("Falta cierre de expresión de lectura")
@@ -863,7 +881,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Condicion if> ::= “wenn” “<” <Expresion Logica> “>” “(“ [<Lista Sentencias>] “)” [“hein” “(“ [<Lista Sentencias>] “)”]
+     * <Condicion if> ::= “wenn” “<” <Valor> “>” “(“ [<Lista Sentencias>] “)” [“hein” “(“ [<Lista Sentencias>] “)”]
      */
     fun esCondicionIf(): CondicionIf? {
         if (tokenActual.darTipo() == Categoria.CONDICION_If) {
@@ -872,7 +890,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 tokenActual.darLexema() == "<"
             ) {
                 obtenerSiguienteToken()
-                val expresionL: ExpresionLogica? = esExpresionLogica()
+                val expresionL: Valor? = esValor()
                 if (expresionL != null) {
                     if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                         tokenActual.darLexema() == ">"
@@ -1039,14 +1057,15 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Expresion Relacional> ::= "<"<Expresion Relacional>">" [<Operador Relacional> <Expresion Relacional2>] | <Expresion Aritemetica> <Operador Relacional> <Expresion Relacional2>
+     * <Expresion Relacional> ::= "<"<Valor>">" <Operador Relacional> <Valor>
      */
     fun esExpresionRelacional(): ExpresionRelacional? {
+        println("expresion re "+tokenActual)
         if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
             tokenActual.darLexema() == "<"
         ) {
             obtenerSiguienteToken()
-            val expresion1: Expresion? = esExpresionRelacional()
+            val expresion1: Valor? = esValor()
             if (expresion1 != null) {
                 if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                     tokenActual.darLexema() == ">"
@@ -1055,90 +1074,19 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                     if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL) {
                         val operador: Token = tokenActual
                         obtenerSiguienteToken()
-                        val expresion2: Expresion? = esExpresionRelacional2()
+                        val expresion2: Valor? = esValor()
                         if (expresion2 != null) {
                             return ExpresionRelacional(expresion1, operador, expresion2)
                         } else {
                             reportarError("Falta expresión a relacionar")
                         }
-                    } else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
+                    } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO) {
                         return null
                     }
-                    return ExpresionRelacional(expresion1, null, null)
                 } else {
                     reportarError("Falta cerrar la agrupación de expresión")
                 }
             }
-        }
-        val expresion1: Expresion? = esExpresionAritmetica()
-        if (expresion1 != null) {
-            if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL) {
-                val operador: Token = tokenActual
-                obtenerSiguienteToken()
-                val expresion2: Expresion? = esExpresionRelacional2()
-                if (expresion2 != null) {
-                    return ExpresionRelacional(expresion1, operador, expresion2)
-                } else {
-                    reportarError("Falta expresión a relacionar")
-                }
-            }else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
-                return null
-            } else if(tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION){
-                return ExpresionRelacional(expresion1, null, null)
-            }else{
-                reportarError("Falta operador relacional"+tokenActual.darLexema())
-            }
-        }
-        return null
-    }
-
-    /**
-     * <Expresion Relacional2> ::= "<"<Expresion Relacional>">" [<Operador Relacional> <Expresion Relacional2>] | <Expresion Aritemetica> [<Operador Relacional> <Expresion Relacional2>]
-     */
-    fun esExpresionRelacional2(): ExpresionRelacional? {
-        if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
-            tokenActual.darLexema() == "<"
-        ) {
-            obtenerSiguienteToken()
-            val expresion1: Expresion? = esExpresionRelacional()
-            if (expresion1 != null) {
-                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
-                    tokenActual.darLexema() == ">"
-                ) {
-                    obtenerSiguienteToken()
-                    if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL) {
-                        val operador: Token = tokenActual
-                        obtenerSiguienteToken()
-                        val expresion2: Expresion? = esExpresionRelacional2()
-                        if (expresion2 != null) {
-                            return ExpresionRelacional(expresion1, operador, expresion2)
-                        } else {
-                            reportarError("Falta expresión a relacionar")
-                        }
-                    } else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
-                        return null
-                    }
-                    return ExpresionRelacional(expresion1, null, null)
-                } else {
-                    reportarError("Falta cerrar la agrupación de expresión")
-                }
-            }
-        }
-        val expresion1: Expresion? = esExpresionAritmetica()
-        if (expresion1 != null) {
-            if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL) {
-                val operador: Token = tokenActual
-                obtenerSiguienteToken()
-                val expresion2: Expresion? = esExpresionRelacional2()
-                if (expresion2 != null) {
-                    return ExpresionRelacional(expresion1, operador, expresion2)
-                } else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
-                    return null
-                } else {
-                    reportarError("Falta expresión a relacionar")
-                }
-            }
-            return ExpresionRelacional(expresion1, null, null)
         }
         return null
     }
