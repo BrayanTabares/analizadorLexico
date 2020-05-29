@@ -4,7 +4,7 @@ import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
-class Lectura (var expresion : Expresion?) : Sentencia() {
+class Lectura (var expresion : Valor?) : Sentencia() {
     override fun toString(): String {
         return "lessen <$expresion>"
     }
@@ -23,5 +23,9 @@ class Lectura (var expresion : Expresion?) : Sentencia() {
         ambito: String
     ): String {
         return "fessel"
+    }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        expresion?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
     }
 }

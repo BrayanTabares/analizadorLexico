@@ -26,4 +26,13 @@ class TipoDato(val valor: Token?, val tipo : TipoDato?) {
        return TreeItem("")
     }
 
+    fun getJavaCode(): String {
+        if(valor!=null){
+            return valor.getJavaCode()
+        }else if(tipo!=null){
+            return tipo.getJavaCode()+"[]"
+        }
+        return ""
+    }
+
 }

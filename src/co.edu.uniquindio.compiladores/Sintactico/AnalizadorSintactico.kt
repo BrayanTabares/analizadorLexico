@@ -502,7 +502,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <lectura> ::= "lesen" "<" [<Expresion>] ">" "!"
+     * <lectura> ::= "lesen" "<" [<Valor>] ">" "!"
      */
     fun esLectura(): Lectura? {
         if (tokenActual.darTipo() == Categoria.LECTURA &&
@@ -513,7 +513,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 tokenActual.darLexema() == "<"
             ) {
                 obtenerSiguienteToken()
-                val expresion: Expresion? = esExpresion()
+                val expresion: Valor? = esValor()
                 if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                     tokenActual.darLexema() == ">"
                 ) {
@@ -535,30 +535,12 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <lectura> ::= "lesen" "<" [<Expresion>] ">" "!"
+     * <lectura> ::= "lesen" "<" [<Valor>] ">" "!"
      */
     fun esValorLectura(): ValorLectura? {
-        if (tokenActual.darTipo() == Categoria.LECTURA &&
-            tokenActual.darLexema() == "lesen"
-        ) {
-            obtenerSiguienteToken()
-            if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
-                tokenActual.darLexema() == "<"
-            ) {
-                obtenerSiguienteToken()
-                val expresion: Expresion? = esExpresion()
-                if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
-                    tokenActual.darLexema() == ">"
-                ) {
-                    obtenerSiguienteToken()
-                    return ValorLectura(Lectura(expresion))
-
-                } else {
-                    reportarError("Falta cierre de expresión de lectura")
-                }
-            } else {
-                reportarError("Falta apertura de expresión de lectura")
-            }
+        val tipo: Lectura? = esLectura()
+        if (tipo != null) {
+            return ValorLectura(tipo)
         }
         return null
     }
@@ -681,7 +663,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Impresion> ::= “druken” “<” [<Expresion>] “>” “!”
+     * <Impresion> ::= “druken” “<” [<Valor>] “>” “!”
      */
     fun esImpresion(): Impresion? {
         if (tokenActual.darTipo() == Categoria.IMPRESION &&
@@ -692,7 +674,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 tokenActual.darLexema() == "<"
             ) {
                 obtenerSiguienteToken()
-                val expresion: Expresion? = esExpresion()
+                val expresion: Valor? = esValor()
                 if (tokenActual.darTipo() == Categoria.OPERADOR_AGRUPACION &&
                     tokenActual.darLexema() == ">"
                 ) {

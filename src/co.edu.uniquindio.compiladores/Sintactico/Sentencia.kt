@@ -20,4 +20,8 @@ open class Sentencia {
     open fun obtenerTipo(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String): String {
         return ""
     }
+
+    open fun getJavaCode(): String {
+        return ""
+    }
 }

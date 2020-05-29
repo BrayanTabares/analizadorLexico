@@ -19,4 +19,8 @@ class Parametro (var tipoDato : TipoDato, var nombre : Token) {
     ) {
         tablaSimbolos.guardarSimboloVariable(nombre.darLexema(),tipoDato.toString(),ambito,nombre.fila,nombre.columna)
     }
+
+    fun getJavaCode(): String {
+        return tipoDato.getJavaCode()+" "+nombre.getJavaCode()
+    }
 }

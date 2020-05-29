@@ -73,7 +73,26 @@ class Funcion (var nombre : Token, var parametros : ArrayList<Parametro>, var ti
     }
 
     fun getJavaCode(): String {
-
-        return ""
+        var tipo = "void"
+        if (tipoDato != null) {
+            tipo = tipoDato!!.getJavaCode()
+        }
+        var codigo = "public static $tipo ${nombre.getJavaCode()} ("
+        if (nombre.darLexema().equals("-main") && parametros.isEmpty() && tipoDato==null) {
+            codigo += "String[] args"
+        } else {
+            if (!parametros.isEmpty()) {
+                for (p in parametros) {
+                    codigo += p.getJavaCode() + ","
+                }
+                codigo = codigo.substring(0, codigo.length - 1)
+            }
+        }
+        codigo += "){"
+        for (sentencia in sentencias) {
+            codigo += sentencia.getJavaCode()
+        }
+        codigo += "}"
+        return codigo
     }
 }

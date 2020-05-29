@@ -15,4 +15,9 @@ class Token(var lexema:String, var categoria: Categoria, var fila:Int, var colum
     fun darLexema(): String{
         return lexema
     }
+
+    fun getJavaCode() :String {
+
+        return ""
+    }
 }

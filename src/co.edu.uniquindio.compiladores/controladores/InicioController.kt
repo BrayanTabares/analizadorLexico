@@ -1,6 +1,7 @@
 package co.edu.uniquindio.compiladores.controladores
 
 import co.edu.uniquindio.compiladores.Sintactico.AnalizadorSintactico
+import co.edu.uniquindio.compiladores.Sintactico.UnidadDeCompilacion
 import co.edu.uniquindio.compiladores.lexico.AnalizadorLexico
 import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
@@ -51,6 +52,10 @@ class InicioController: Initializable{
 
     @FXML lateinit var arbolVisual: TreeView<String>
 
+    @FXML lateinit var btnTraducir: Button
+
+    var unidadCompilacion : UnidadDeCompilacion? = null
+
     @FXML
     fun analizarCodigo(e: ActionEvent){
         tablaTokens.items = null
@@ -77,6 +82,9 @@ class InicioController: Initializable{
                          var alerta = Alert(Alert.AlertType.ERROR)
                          alerta.contentText = "Hay errores semánticos en el código fuente"
                          alerta.show()
+                     }else{
+                         btnTraducir.setDisable(false)
+                         unidadCompilacion=uc
                      }
                  }
                  if(!sintaxis.listaErrores.isEmpty()){
@@ -94,8 +102,18 @@ class InicioController: Initializable{
          }
     }
 
-
-
+    @FXML
+    fun traducirCodigo(event: ActionEvent?) {
+        val codigoFuente = unidadCompilacion!!.getJavaCode()
+        File("src/Principal.java").writeText( codigoFuente )
+        try {
+            val p = Runtime.getRuntime().exec("javac src/Principal.java")
+            p.waitFor()
+            Runtime.getRuntime().exec("java Principal", null, File("src"))
+        } catch (ea: Exception) {
+            ea.printStackTrace()
+        }
+    }
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         colLexema.cellValueFactory = PropertyValueFactory("lexema")
@@ -126,5 +144,6 @@ class InicioController: Initializable{
         imageD2.setImage(d2)
         imageD21.setImage(d2)
 
+        btnTraducir.setDisable(true)
     }
 }
