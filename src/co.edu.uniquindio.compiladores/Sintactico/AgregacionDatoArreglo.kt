@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class AgregacionDatoArreglo (var nombre: Token, var posicion: ValorNumerico, var valor: Valor): ComandoArreglo(){
     override fun toString(): String {
-        return "Agregacion de dato a un arreglo (nombre= $nombre, posicion= $posicion, valor= $valor"
+        return "$nombre {$posicion} [${nombre.fila},${nombre.columna}]"
     }
 
     override fun getArbolVisual (): TreeItem<String> {

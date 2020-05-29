@@ -33,18 +33,18 @@ class CicloFor(var inicializacion: Inicializacion?,var expresionRelacional: Expr
         erroresSemanticos: ArrayList<Error>,
         ambito: String
     ) {
-        inicializacion?.llenarTablaSimbolos(tablaSimbolos,erroresSemanticos,"$ambito")
+        inicializacion?.llenarTablaSimbolos(tablaSimbolos,erroresSemanticos,"$ambito $this")
         for(s in sentencias){
-            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito")
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
-        inicializacion?.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito")
-        expresionRelacional.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito")
-        incremento.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito")
+        inicializacion?.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
+        expresionRelacional.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
+        incremento.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         for(s in sentencias){
-            s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito")
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
 }

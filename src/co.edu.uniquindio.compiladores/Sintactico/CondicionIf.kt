@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class CondicionIf(var expresion: ExpresionLogica, var sentencias: ArrayList<Sentencia>, var sentenciasElse: ArrayList<Sentencia>): Condicion() {
     override fun toString(): String {
-        return "CondicionIf(expresion=$expresion, sentencia=$sentencias, sentenciaElse=$sentenciasElse)"
+        return "wenn <$expresion> ( $sentencias ) ( $sentenciasElse )"
     }
 
     override fun getArbolVisual(): TreeItem<String> {
@@ -35,20 +35,20 @@ class CondicionIf(var expresion: ExpresionLogica, var sentencias: ArrayList<Sent
         ambito: String
     ) {
         for(s in sentencias){
-            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito $this if")
         }
         for(s in sentenciasElse){
-            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito $this else")
         }
     }
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
-        expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         for(s in sentencias){
-            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this if")
         }
         for(s in sentenciasElse){
-            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this else")
         }
     }
 

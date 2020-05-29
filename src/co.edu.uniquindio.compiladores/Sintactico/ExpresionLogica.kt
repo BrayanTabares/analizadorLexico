@@ -6,6 +6,17 @@ import javafx.scene.control.TreeItem
 
 open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token?, var  expresion2: ExpresionLogica?, var valor :ValorLogico?) : Expresion(){
     override fun toString(): String {
+        if(expresion1!=null && expresion2==null) {
+            return "$expresion1"
+        }else if(valor!=null && expresion2==null){
+            return "$valor"
+        } else if(expresion1!=null && expresion2 !=null){
+            return "$expresion1 $operador $expresion2"
+        }else if(valor!=null && expresion2 !=null){
+            return "$valor $operador $expresion2"
+        } else if(expresion2 !=null){
+            return "$operador $expresion2"
+        }
         return "ExpresionLogica(expresion1=$expresion1, operador=$operador, expresion2=$expresion2)"
     }
 

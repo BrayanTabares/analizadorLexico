@@ -7,6 +7,11 @@ import javafx.scene.control.TreeItem
 
 class ExpresionRelacional(var expresion1: Expresion, var operador: Token?, var expresion2: Expresion?) : Expresion(){
     override fun toString(): String {
+        if(expresion1!=null && expresion2==null) {
+            return "$expresion1"
+        } else if(expresion1!=null && expresion2 !=null){
+            return "$expresion1 $operador $expresion2"
+        }
         return "ExpresionRelacional(expresion1=$expresion1, operador=$operador, expresion2=$expresion2)"
     }
 

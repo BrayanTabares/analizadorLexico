@@ -71,4 +71,9 @@ class Funcion (var nombre : Token, var parametros : ArrayList<Parametro>, var ti
             erroresSemanticos.add(Error("El método ${nombre.darLexema()} debe tener un retorno",nombre.fila,nombre.columna))
         }
     }
+
+    fun getJavaCode(): String {
+
+        return ""
+    }
 }

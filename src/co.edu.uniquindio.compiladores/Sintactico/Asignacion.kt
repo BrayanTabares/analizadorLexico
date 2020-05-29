@@ -8,7 +8,7 @@ import javafx.scene.control.TreeItem
 
 class Asignacion (var identificador : Token, var valor: Valor): Sentencia() {
     override fun toString(): String {
-        return "$identificador = $valor"
+        return "$identificador = $valor [${identificador.fila},${identificador.columna}]"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

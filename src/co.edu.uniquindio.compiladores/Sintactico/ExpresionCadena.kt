@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class ExpresionCadena(var cadena: Token, var  valor: ArrayList<ValorCadena>) : Expresion(){
     override fun toString(): String {
-        return "ExpresionCadena(cadena=$cadena, valorCadena=$valor)"
+        return "$cadena $ $valor [${cadena.fila},${cadena.columna}]"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

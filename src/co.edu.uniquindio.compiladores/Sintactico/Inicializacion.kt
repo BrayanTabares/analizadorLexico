@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class Inicializacion (var tipoDato: TipoDato, var identificador: Token, var valor: Valor?) : Sentencia() {
     override fun toString(): String {
-        return "Inicializacion(tipoDato=$tipoDato, identificador=$identificador, valor=$valor)"
+        return "$tipoDato $identificador = $valor [${identificador.fila},${identificador.columna}]"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

@@ -4,7 +4,7 @@ import javafx.scene.control.TreeItem
 
 class Impresion (var expresion : Expresion?) : Sentencia() {
     override fun toString(): String {
-        return "Impresion(expresion=$expresion)"
+        return "druken <$expresion>"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

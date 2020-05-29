@@ -18,7 +18,7 @@ class TablaSimbolos(var listaErrores: ArrayList<Error>) {
             listaSimbolos.add(nuevo)
             return nuevo
         } else {
-            listaErrores.add(Error("La variable $nombre ya existe en el ámbito $ambito",fila,columna))
+            listaErrores.add(Error("La variable $nombre ya existe en el ámbito",fila,columna))
         }
         return null
     }
@@ -45,6 +45,9 @@ class TablaSimbolos(var listaErrores: ArrayList<Error>) {
         for (simbolo in listaSimbolos) {
             if (simbolo.ambito != null) {
                 if (nombre == simbolo.nombre && ambito == simbolo.ambito) {
+                    return simbolo
+                }
+                if(nombre == simbolo.nombre && ambito.contains(simbolo.ambito!!)){
                     return simbolo
                 }
             }

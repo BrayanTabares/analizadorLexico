@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class Lectura (var expresion : Expresion?) : Sentencia() {
     override fun toString(): String {
-        return "Lectura(expresion=$expresion)"
+        return "lessen <$expresion>"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

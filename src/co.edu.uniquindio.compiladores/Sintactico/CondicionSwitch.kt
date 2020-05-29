@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class CondicionSwitch(var expresion: Expresion, var listaCasos: ArrayList<Caso>) : Condicion() {
     override fun toString(): String {
-        return "CondicionSwitch(expresion=$expresion, listaCasos=$listaCasos)"
+        return "anre <$expresion> ($listaCasos)"
     }
 
     override fun getArbolVisual(): TreeItem<String> {
@@ -29,7 +29,7 @@ class CondicionSwitch(var expresion: Expresion, var listaCasos: ArrayList<Caso>)
         ambito: String
     ) {
         for(s in listaCasos){
-            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
 }

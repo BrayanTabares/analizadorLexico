@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class CicloWhile( var expresionL: ExpresionLogica, var sentencias: ArrayList<Sentencia>) : Iterador() {
     override fun toString(): String {
-        return "CicloWhile(expresionL=$expresionL, sentencias=$sentencias)"
+        return "reprise <$expresionL> ( $sentencias )"
     }
 
     override fun getArbolVisual(): TreeItem<String> {
@@ -29,14 +29,14 @@ class CicloWhile( var expresionL: ExpresionLogica, var sentencias: ArrayList<Sen
         ambito: String
     ) {
         for(s in sentencias){
-            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
 
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
-        expresionL.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        expresionL.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         for(s in sentencias){
-            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
 
     }

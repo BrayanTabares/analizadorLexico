@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class Retorno(var expresion: Valor?) : Sentencia() {
     override fun toString(): String {
-        return "Retorno(expresion=$expresion)"
+        return "ertrag $expresion"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

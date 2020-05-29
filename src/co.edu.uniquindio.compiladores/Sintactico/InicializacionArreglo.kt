@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class InicializacionArreglo(var tipo: TipoDato?, var nombre: Token, var cantidad: ValorNumerico,var tipo2: TipoDato? ): ComandoArreglo(){
     override fun toString(): String {
-        return "Inicializacion de un Arreglo (tipo= $tipo, cantidad= $cantidad, nombre= $nombre"
+        return "$tipo $nombre {} = $cantidad [${nombre.fila},${nombre.columna}]"
     }
 
     override fun getArbolVisual (): TreeItem<String> {

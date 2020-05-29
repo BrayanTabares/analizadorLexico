@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class Declaracion (var tipoDato:TipoDato, var listaIdentificadores : ArrayList<Token>) : Sentencia() {
     override fun toString(): String {
-        return "Declaracion(tipoDato=$tipoDato, listaIdentificadores=$listaIdentificadores)"
+        return "$tipoDato $listaIdentificadores [${listaIdentificadores[0].fila},${listaIdentificadores[0].columna}]"
     }
 
     override fun getArbolVisual(): TreeItem<String> {

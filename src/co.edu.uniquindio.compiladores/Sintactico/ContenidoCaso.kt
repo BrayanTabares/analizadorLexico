@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 
 class ContenidoCaso( var listaSentencias: ArrayList<Sentencia>, var contenido: ContenidoCaso?, var caso: Caso? ) {
     override fun toString(): String {
-        return "ContenidoCaso(listaSentencias=$listaSentencias, contenido=$contenido, caso=$caso)"
+        return "$listaSentencias, $contenido, $caso"
     }
 
     fun getArbolVisual(): TreeItem<String> {
@@ -31,15 +31,15 @@ class ContenidoCaso( var listaSentencias: ArrayList<Sentencia>, var contenido: C
 
     fun llenarTablaSimbolos(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         for(s in listaSentencias){
-            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito)
+            s.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
 
     fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
-        contenido?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
-        caso?.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        contenido?.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
+        caso?.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         for(s in listaSentencias){
-            s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+            s.analizarSemantica(tablaSimbolos, erroresSemanticos, "$ambito $this")
         }
     }
 }

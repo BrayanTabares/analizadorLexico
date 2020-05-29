@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class ObtencionArreglo(var tipo: TipoDato?, var cantidad: ValorNumerico): Valor(){
     override fun toString(): String {
-        return "Inicializacion de un Arreglo (tipo= $tipo, cantidad= $cantidad"
+        return "$tipo <$cantidad>"
     }
 
     override fun getArbolVisual (): TreeItem<String> {

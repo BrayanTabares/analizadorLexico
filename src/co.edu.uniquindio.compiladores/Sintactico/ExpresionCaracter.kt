@@ -7,7 +7,7 @@ import javafx.scene.control.TreeItem
 
 class ExpresionCaracter(var caracter: Token) :Expresion(){
     override fun toString(): String {
-        return "ExpresionCaracter(caracter=$caracter)"
+        return "$caracter [${caracter.fila},${caracter.columna}]"
     }
 
     override fun getArbolVisual(): TreeItem<String> {
