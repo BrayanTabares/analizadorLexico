@@ -31,6 +31,6 @@ class ValorInvocacion(var invocacion: InvocacionFuncion) : Valor() {
     }
 
     override fun getJavaCode(): String {
-        return invocacion.getJavaCode()
+        return invocacion.getJavaCode().replace(";","")
     }
 }

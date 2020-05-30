@@ -26,7 +26,7 @@ class DeclaracionArreglo(var tipoDato: TipoDato?, var nombre: Token):ComandoArre
     }
 
     override fun getJavaCode(): String {
-        return tipoDato!!.getJavaCode() + "[]" + nombre!!.getJavaCode()+";"
+        return tipoDato!!.getJavaCode() + "[]" + nombre.getJavaCode()+";"
     }
 
 }

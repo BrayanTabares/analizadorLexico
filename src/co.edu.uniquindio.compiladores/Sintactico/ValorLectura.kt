@@ -28,7 +28,7 @@ class ValorLectura(var lectura: Lectura) : Valor() {
     }
 
     override fun getJavaCode(): String {
-        return lectura.getJavaCode()
+        return lectura.getJavaCode().replace(";","")
     }
 
 }
