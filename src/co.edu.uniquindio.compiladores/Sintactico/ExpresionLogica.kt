@@ -78,12 +78,12 @@ open class ExpresionLogica(var expresion1: ExpresionLogica?, var operador: Token
             return expresion1!!.getJavaCode()
         }
         if (expresion2!= null && operador!= null && valor!=null){
-            return expresion2!!.getJavaCode() + operador!!.getJavaCode()+valor!!.getJavaCode()
+            return "("+expresion2!!.getJavaCode()+")"+ operador!!.getJavaCode()+ valor!!.getJavaCode()
         }
         if (expresion1==null && expresion2==null && operador ==null){
             return valor!!.getJavaCode()
         }else{
-            return operador!!.getJavaCode()+expresion2!!.getJavaCode()
+            return "("+operador!!.getJavaCode()+expresion2!!.getJavaCode()+")"
         }
     }
 }
