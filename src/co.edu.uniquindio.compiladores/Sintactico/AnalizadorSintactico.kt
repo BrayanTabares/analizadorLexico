@@ -957,7 +957,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         }
         tokenActual = token
         posicionActual = posicion
-        tipo = esExpresionAritmetica()
+        tipo = esExpresionLogica()
         if (tipo != null) {
             return tipo
         }
@@ -969,7 +969,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
         }
         tokenActual = token
         posicionActual = posicion
-        tipo = esExpresionLogica()
+        tipo = esExpresionAritmetica()
         if (tipo != null) {
             return tipo
         }
@@ -1057,7 +1057,7 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Expresion Relacional> ::= "<"<Valor>">" <Operador Relacional> <Valor>
+     * <Expresion Relacional> ::= "<"<Valor>">" <Operador Relacional> <Valor> | <expresionArimetica> <Operador Relacional> <Valor>
      */
     fun esExpresionRelacional(): ExpresionRelacional? {
         println("expresion re "+tokenActual)
@@ -1076,16 +1076,31 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         obtenerSiguienteToken()
                         val expresion2: Valor? = esValor()
                         if (expresion2 != null) {
-                            return ExpresionRelacional(expresion1, operador, expresion2)
+                            return ExpresionRelacional(expresion1, operador, expresion2,null)
                         } else {
                             reportarError("Falta expresión a relacionar")
                         }
-                    } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO) {
+                    } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO || tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO) {
                         return null
                     }
                 } else {
                     reportarError("Falta cerrar la agrupación de expresión")
                 }
+            }
+        }
+        var expresion: ExpresionAritmetica? = esExpresionAritmetica()
+        if (expresion != null) {
+            if (tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL) {
+                val operador: Token = tokenActual
+                obtenerSiguienteToken()
+                val expresion2: Valor? = esValor()
+                if (expresion2 != null) {
+                    return ExpresionRelacional(null, operador, expresion2,expresion)
+                } else {
+                    reportarError("Falta expresión a operar")
+                }
+            }else if(tokenActual.darTipo() == Categoria.OPERADOR_LOGICO || tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO){
+                return null
             }
         }
         return null
@@ -1122,8 +1137,6 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         } else {
                             reportarError("Falta expresión a relacionar")
                         }
-                    } else if(tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL || tokenActual.darTipo() == Categoria.OPERADOR_LOGICO){
-                        return null
                     }
                     return ExpresionAritmetica(expresion1, null, null, null)
                 } else {
@@ -1173,6 +1186,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                         }
                     } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() == "/") {
                         reportarError("El operador / es Unario")
+                    } else if(tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL || tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO){
+                        return null
                     }
                     return ExpresionLogica(expresion1, null, null,null)
                 } else {
@@ -1193,6 +1208,8 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
                 }
             } else if (tokenActual.darTipo() == Categoria.OPERADOR_LOGICO && tokenActual.darLexema() == "/") {
                 reportarError("El operador / es unario")
+            } else if(tokenActual.darTipo() == Categoria.OPERADOR_RELACIONAL || tokenActual.darTipo() == Categoria.OPERADOR_ARITMETICO){
+                return null
             }
             return ExpresionLogica(null, null, null,valor)
         }
